@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Advanced Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #header {
+            justify-content: left;
+            font-size:20px;
+            padding: 10px;
+            
+            height: 40px;
+        }
+        .container {
+            border-top: 1px solid #5f6368;
+            border-bottom: 1px solid #5f6368;
+            
+        }
+        #grid{
+                background-color:#202124 ;
+                display: grid;
+                padding: auto;
+                column-gap: 1px;
+                row-gap: 10px;
+                grid-template-columns: 20%  auto;
+                color: black;
+                width: 100%;
+            }
+            .grid-item{
+                background-color:#202124;
+                font-size: 13px;
+                padding: 10px;
+                display: flex;
+                margin: 0px;
+                text-align: left;
+                align-items: center;
+                align-content: center;
+                color: #bdc1c6;
+                width: 50%;
+
+            }
+
+            .grid-item > input {
+                width: 100%;
+                all: unset;
+                color: white;
+                border: 1px solid #5f6368;
+                padding: 1px 8px;
+                border-radius: 1px;
+                font-size: 13px;
+                height: 25px;
+                border: 1px solid #5f6368;
+            }
+
+            .grid-item > input:focus {
+                border: 1px solid #85afe2;
+            }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-link"><a href="index.html">Google Search</a></div>
+    </nav>
+
+        <div style="padding: 20px; font-size: 20px; color:#f28b82;" >Advanced Search</div>
+
+
+    <div class="container">
+        <div class="grid-container"
+        style="">
+
+            <div style="padding: 20px;">
+                <form action="https://www.google.com/search">
+
+                <div id="grid">
+
+                    <div style="font-size: 16px;color: #e8eaed;" class="grid-item">Find pages with...</div>
+                    <div class="grid-item"></div>
+
+                    <div class="grid-item">
+                        all these words :
+                    </div>
+
+                    <div class="grid-item">
+                        <input style="width:100% ; " name="as_q" type="text" value="">
+                        <input type="hidden" name="as_qdr" value="all">
+                    </div>
+    
+                    <div class="grid-item">
+                        this exact word or phrase :
+                    </div>
+    
+                    <div class="grid-item">
+                        <input style="width:100% ; " name="as_epq" type="text" value="">
+                    </div>
+
+
+                    <div class="grid-item">
+                        any of these words :
+                    </div>
+    
+                    <div class="grid-item">  
+                        <input style="width:100% ; " name ='as_oq' type="text" value="">
+                        <input type="hidden" name="as_occt" value="aby">
+                    </div>
+    
+
+                    <div class="grid-item">
+                        none of these words :
+                    </div>
+
+                    <div class="grid-item">
+                        <input style="width:100% ; " name="as_eq" type="text" value="">
+                    </div>
+
+                    <div class="grid-item"></div>
+                    <div class="grid-item"  style="display: flex; justify-content:flex-end ;">
+                        <div class="advanced-submit-container">
+                            <input type="submit" value="Advanced search">
+                        </div>
+                    </div>
+
+        
+                </div>
+            </form>
+            </div>
+           
+
+        </div>
+    </div>
+
+</body>
+</html>

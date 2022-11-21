@@ -1,0 +1,162 @@
+body{
+    background-color: #202124;
+    height: 100%;
+    min-width: 400px;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.sub-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    height: calc(100vh - 200px);
+}
+
+
+/********************** NAV *****************/
+nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 13px;
+    height: 48px;
+    padding: 10px;
+
+}
+
+.nav-link {
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    height: 48px;
+}
+
+.nav-link > a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+/*********************** ImAGE **************************/
+.img-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-container > img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    width: auto
+}
+
+/******************* Form ***************************/
+.form-container {
+    display: block;
+    border: 1px solid #5f6368;
+    border-radius: 40px;
+    width: 40%;
+    padding: 10px;
+    margin-top: 30px;
+}
+
+.form-container:hover{
+    background-color: #303134;
+    border: 1px solid #202124;
+}
+
+.input-container input {
+    all: unset;
+    color: #e8eaed;
+    padding-left: 5px;
+    width: 100%;    
+}
+
+.input-container {
+    display: flex;
+    padding: 5px 8px 10 14px;
+    font-size: 14px;
+}
+
+form {
+    display: flex;
+    width: 100%;
+}
+
+.submit-container {
+    padding-top: 30px;
+}
+
+
+.submit-container input{
+    all: unset;
+    padding: 0 16px;
+    line-height: 27px;
+    height: 36px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #303134;
+    margin: 11px 4px;
+    background-color: #303134;
+
+
+}
+
+.submit-container input:hover{
+    cursor: pointer;
+    border: 1px solid #5f6368;
+}
+
+
+.span-image {
+    color:#4487f6 ;
+    font-family: roboto-regular, arial, sans-serif;
+    font-size: 16px;
+    left: 215px;
+    padding-left: 200px;
+}
+
+/************************* Advanced Search ********************/
+
+
+.advanced-submit-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.advanced-submit-container input {
+    all: unset;
+    height: 30px;
+    text-align: center;
+    min-width: 120px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: bold;
+    background: #8ab4f8;
+    border-color: #8ab4f8;
+    color: white ;
+    border: 1px solid #3079ed;
+}
+
+
+.advanced-submit-container input:hover{
+    cursor: pointer;
+    background-color: #bdc1c6;
+}
+

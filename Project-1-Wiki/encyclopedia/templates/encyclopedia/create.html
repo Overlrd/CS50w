@@ -1,0 +1,31 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create
+{% endblock %}
+
+{% block header %}
+    {% include "encyclopedia/messages.html" %}
+{% endblock %} 
+
+
+{% block body %}
+
+<form action=" {% url 'my_wiki:create' %} " method="POST">
+        {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Wiki's title </label>
+      <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="title">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">Wiki's content</label>
+      <textarea name='content' type="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-primary mb-2" type="submit" id="submit1" value="create">
+    </div>
+
+  </form>
+{% endblock %}

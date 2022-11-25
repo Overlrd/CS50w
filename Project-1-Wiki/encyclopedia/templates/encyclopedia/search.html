@@ -1,0 +1,32 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search - {{query}} 
+{% endblock %}
+
+
+{% block body %}
+    <center>
+        {% if query %}
+            <h2>You searched for {{query}} </h2>
+
+        {% else %}
+
+            <h2>You forgot the enter a query </h2>
+
+        {% endif %}
+
+        <ul style="list-style: none;">
+        {% for item in results %}
+        <li>
+            <a href="{% url 'my_wiki:entry' item %}">{{item}}</a>
+        </li>
+        {% endfor %}
+        </ul>
+
+
+    </center>
+
+
+
+{% endblock %}

@@ -25,7 +25,6 @@ The final result looks like :
 <br />
 
 <img  src='https://user-images.githubusercontent.com/90383672/203099502-92783dd5-4554-4af8-8f99-b878d50cd012.png' width=500px />
-<img  src='https://user-images.githubusercontent.com/90383672/203100703-7440e665-6308-4184-a5c5-8015c6d1d0a4.png' width=500px />
 <img  src='https://user-images.githubusercontent.com/90383672/203100209-57d645f3-e9f0-4fb4-824e-c6e2415de6de.png' width=500px />
 
 ## Project 1

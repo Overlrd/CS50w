@@ -9,10 +9,22 @@
 {% endblock %} 
 
 {% block body %}
+
     <div>
+        {% if "https://http.cat/404" not in  content  %}
+        
         <a href="{% url 'my_wiki:edit' title %}">Edit</a>
 
         {{ content | safe }}
+
+        {% elif "https://http.cat/404" in content %}
+        <center>    
+        {{ content | safe }}
+        </center>
+
+
+        {% endif %}
+
     </div>
 
 {% endblock %}

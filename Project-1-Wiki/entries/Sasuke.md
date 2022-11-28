@@ -1,2 +1,0 @@
-#Sasuke
-Ninja from konoha

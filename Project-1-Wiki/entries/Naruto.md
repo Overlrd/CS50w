@@ -1,2 +1,0 @@
-#Naruto
-Ninja from Konoha

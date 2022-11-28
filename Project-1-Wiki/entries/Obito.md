@@ -1,2 +1,0 @@
-#Obito
-Akatsuli

@@ -2,5 +2,4 @@
 runtime.txt
 steps.md
 __pycache__
-.CS50-env
-./CS50-env
+.CS50-env/

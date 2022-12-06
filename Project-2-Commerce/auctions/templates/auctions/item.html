@@ -1,0 +1,96 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %} Item {% endblock title %} 
+
+{% block body %}
+
+<div class="container">
+
+    <div id="sub_container" class="row" style=" display: flex; margin-bottom: 100px;">
+        <!--Image container-->
+        <div class='image_container' style="width: 40%; margin: 0 auto;">
+            <img class="card-img-top" src="{{current_auction.image_url}}" alt="Card image cap"  style="width:100%; height:300px;"> 
+        </div>
+
+        <!--Info and details container-->
+
+        <div class="col-sm info_container" style="text-align: center; display: flex;  flex-direction: column;" >
+            <h1> {{ current_auction.title }} </h1>
+            <p> {{ current_auction.description }} </p>
+            <small>Opened on {{ current_auction.date }} by {{ current_auction.user }}</small>
+
+            <div class="col-sm" style=" align-items: center; display: flex; width: 100%;  ">
+
+                <div class="actual_bid col-sm" style="width: auto;">
+                    <small>Staring bid : {{current_auction.starting_bid}} $</small>
+                    <h4>Current bid : {{ current_auction_bids.first.value }} $</h4>
+
+                    {% if current_auction_bids.first.related_user.username == request.user.username  %}
+                    <h4> Passed by : You </h4>
+
+                    {% else %}
+                    <h4> Passed by : {{ current_auction_bids.first.related_user }} </h4>
+
+                    {% endif %}
+
+                </div>
+                
+                <div class="actual_bid" style=" height: 60%; width: 60%; padding-left: 20px; ">
+                    <h3>Put a bid </h3>
+                {% if user.is_authenticated %}
+                    <div  style="display: block; place-items: center; " >
+                       <form action="{% url 'bid' %}" method="post">
+                            {% csrf_token %}
+                        <input name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="current_auction" value="{{ current_auction.pk }}">
+                        <div style="padding-top: 10px;">
+                            <input id='submit_input' class="btn btn-primary" type="submit" value="Put a bid">
+
+                        </div>
+
+                    </div>
+                    </form>
+                
+                {% else %}
+                    Sign in to put a bid
+                {% endif %}
+            </div>                
+
+    
+            </div>
+
+
+
+            <div class="add_content" style="padding-top: 15%;">
+                <p> {{ current_auction_bids|length }} bid(s) so far </p> 
+
+                    <p> You have {{current_auction_bids_by_user}} bid(s) here !</p>
+
+            </div>
+
+        </div>
+    </div>
+
+   <div class="more_container" style="width: auto; margin-bottom: 100px;">
+        <small>Similar Items</small>
+
+
+        <div class="card-group">
+            <div class="card">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+    </div>
+
+</div>
+
+{% endblock body %}
+
+
+

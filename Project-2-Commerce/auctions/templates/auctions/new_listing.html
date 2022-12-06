@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<form action="{% url 'new_listing' %}" method="post">
+    {% csrf_token %}
+    <div class="form-row">
+
+      <div class="form-group col-md-4">
+          <label for="inputTitle">Title</label>
+          <input name='title' type="text" class="form-control" id="inputTitle" placeholder="eg Google" required>
+      </div>
+
+      <div class="form-group col-md-4">
+          <label for="inputPassword4">Category</label>
+          <select class="form-control" name='category'>
+              <option value = '' >Select a category</option>
+              <option value="electronics">Electronics</option>
+              <option value="fashion">Fashion</option>
+              <option value="home">Home</option>
+              <option value="toys">Toys</option>
+              <option value="other">Other</option>
+          </select>      
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="inputbid">Starting Bid</label>
+        <input name='bid' type="number" class="form-control" placeholder='1 $' id="inputbid" min="1"  max="10000" required>
+      </div>
+
+  </div>
+
+
+      <div class="form-group">
+          <label>Descritpion</label>
+          <input type="text" name='description' class="form-control">
+      </div>
+
+      <div class="form-group">
+          <label for="inputurl">Image url</label>
+          <input name='img_url'  type="text" class="form-control" id="inputurl" placeholder="https://imgur.img.com">
+      </div>
+
+    <button type="submit" class="btn btn-primary">Post auction</button>
+
+</form>
+
+{% endblock body %}
+
+
+

@@ -1,6 +1,28 @@
 {% extends "auctions/layout.html" %}
 
-{% block title %} Item {% endblock title %} 
+{% block title %} Item {{current_auction.pk}} {% endblock title %} 
+
+{% block script %} 
+<script>
+
+
+    document.querySelector('#bid_form').onsubmit = () => {
+        console.log('form submitted')
+        let bid = document.querySelector('#bid_value').value ;
+        let best_bid = document.querySelector('#best_bid').value ;
+
+        if(Number(bid) < Number(best_bid)){
+            alert("Your bid  must be greater than the Current bid ")
+            return false
+
+        }
+
+    }
+
+</script>
+
+
+{% endblock script %}
 
 {% block body %}
 
@@ -9,7 +31,15 @@
     <div id="sub_container" class="row" style=" display: flex; margin-bottom: 100px;">
         <!--Image container-->
         <div class='image_container' style="width: 40%; margin: 0 auto;">
-            <img class="card-img-top" src="{{current_auction.image_url}}" alt="Card image cap"  style="width:100%; height:300px;"> 
+            <img class="card-img-top" 
+            {% if current_auction.image_url|length > 1 %}
+            src="{{current_auction.image_url}}" 
+            {% else %}
+            src="https://i.imgur.com/j4El531.png" 
+            {% endif %}
+
+            
+            alt="Card image cap"  style="width:100%; height:300px;"> 
         </div>
 
         <!--Info and details container-->
@@ -23,8 +53,9 @@
 
                 <div class="actual_bid col-sm" style="width: auto;">
                     <small>Staring bid : {{current_auction.starting_bid}} $</small>
-                    <h4>Current bid : {{ current_auction_bids.first.value }} $</h4>
+                    <div  style="font-size: 20px;">Current bid : {{ current_auction_bids.first.value }} $</div>
 
+                    
                     {% if current_auction_bids.first.related_user.username == request.user.username  %}
                     <h4> Passed by : You </h4>
 
@@ -39,11 +70,12 @@
                     <h3>Put a bid </h3>
                 {% if user.is_authenticated %}
                     <div  style="display: block; place-items: center; " >
-                       <form action="{% url 'bid' %}" method="post">
+                       <form action="{% url 'bid' %}" method="post" id="bid_form">
                             {% csrf_token %}
-                        <input name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
+                        <input id="bid_value" name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
                         <input type="hidden" name="next" value="{{ request.path }}">
                         <input type="hidden" name="current_auction" value="{{ current_auction.pk }}">
+                        <input id="best_bid" type="hidden" name="best_bid" value="{{ current_auction_bids.first.value }}">
                         <div style="padding-top: 10px;">
                             <input id='submit_input' class="btn btn-primary" type="submit" value="Put a bid">
 
@@ -61,18 +93,89 @@
             </div>
 
 
-
-            <div class="add_content" style="padding-top: 15%;">
+            <div class="add_content" 
+            {% if user.is_authenticated %}
+                style="padding-top: 15%; ">
+            {% else %}
+                style="padding-top: 15%; display: none;">
+            {% endif %} 
                 <p> {{ current_auction_bids|length }} bid(s) so far </p> 
 
+                <form action=" {% url 'watchlist' %} " method='post' >
+                        {% csrf_token %}
                     <p> You have {{current_auction_bids_by_user}} bid(s) here !</p>
+
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    {% if request.user.pk in current_auction_related_watchlist %}
+                        <input type="hidden" name="auction" value="{{ current_auction.pk }}">
+                        <input type="hidden" name="state" value="remove">
+                        <input type="submit" class="btn btn-danger" value='Remove From Watchlist '/>
+                    {% else %}
+                        <input type="hidden" name="auction" value="{{ current_auction.pk }}">
+                        <input type="hidden" name="state" value="add">
+                        <input type="submit" class="btn btn-primary" value='Add to Watchlist' />
+                    {% endif %}
+
+                </form>
+
 
             </div>
 
         </div>
     </div>
 
-   <div class="more_container" style="width: auto; margin-bottom: 100px;">
+    <!-- Comments -->
+
+    <div id="accordion" style="margin-bottom: 10px;">
+        <h2>Comments({{current_auction_comments|length}})</h2>
+        <form 
+        {% if user.is_authenticated %}
+            style="padding-bottom:50px ; " action="{% url 'comment' %}" method='POST' >
+        {% else %}
+            style="display:none; "
+        {% endif %}
+                {% csrf_token %}
+            <div class="form-group" >
+              <label>Title</label>
+              <input type="text" class="form-control" name="title">
+            </div>
+          
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Content</label>
+              <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div> 
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <input type="hidden" name="comment_user" value="{{ request.user.pk }}">
+                <input type="hidden" name="comment_auction" value="{{ current_auction.pk }}">
+                <input class="btn btn-primary" type="submit" value="Add comment"> 
+            </div>
+          </form>
+
+
+        {% for comment in  current_auction_comments %}
+        <div class="card">
+            <div class="card-header" id="headingOne{{ comment.pk }}">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne{{ comment.pk }}" aria-expanded="false" aria-controls="collapseOne{{ comment.pk }}">
+                    {{ comment.title }}
+                </button>
+              </h5>
+              <small>By {{ comment.related_user }} on {{ comment.date }} </small>
+            </div>
+        
+            <div id="collapseOne{{ comment.pk }}" class="collapse" aria-labelledby="headingOne{{ comment.pk }}" data-parent="#accordion">
+              <div class="card-body">
+                {{ comment.content }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+    <!-- Similar Items-->
+   <div class="more_container" style="width: auto; margin-top: 100px; margin-bottom: 100px;">
         <small>Similar Items</small>
 
 

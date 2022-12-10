@@ -66,3 +66,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'comment {self.title} by {self.related_user.username} on auction {self.related_auction.title} on {self.date}'
+
+
+
+###### Creating Watclist ######
+###create a watchlist , one to many realted from user , don't 
+#https://stackoverflow.com/questions/63403309/watchlist-system-on-django
+
+class Watclist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_watchlist')
+    items = models.ManyToManyField(Auction, related_name='related_watchlists')
+
+    def __str__(self):
+        return f'{self.user}"s watchlist containing {self.items}' 

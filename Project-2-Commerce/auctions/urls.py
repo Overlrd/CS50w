@@ -14,6 +14,10 @@ urlpatterns = [
     #listing page
     path("<int:auction_id>/item", views.item, name='item'),
     #pass bid
-    path('bid', views.pass_bid, name='bid')
+    path('bid', views.pass_bid, name='bid'),
+    #add comment
+    path('comment', views.add_comment, name='comment'),
+    #watchlist
+    path('watchlist', views.watchlist, name='watchlist')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

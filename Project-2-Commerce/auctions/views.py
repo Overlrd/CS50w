@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms 
-from .models import User, Auction, Bid
+from .models import User, Auction, Bid, Comment, Watclist
 
 ##### Form
 class NewTaskForm(forms.Form):
@@ -99,15 +99,24 @@ def new_listing(request):
         return render(request, "auctions/new_listing.html")
 
 def item(request, auction_id):
-    #### find the current auction by the id passed triough the item url from the index
 
+    #### find the current auction by the id passed triough the item url from the index
     current_auction = Auction.objects.all().get(pk = auction_id)
     #### TThe current auction's bids orderreb in decreasing order
 
     current_auction_bids = current_auction.auction_bids.all().order_by('-value')
 
+    ###### comments related to this auction
+    current_auction_comments = Comment.objects.all().filter(related_auction = current_auction)
+
+    #### watchlist
+    current_auction_related_watchlist = Watclist.objects.all().filter(items = current_auction)
+    current_auction_related_watchlist_users_list = []
+    for i in current_auction_related_watchlist:
+        current_auction_related_watchlist_users_list.append(i.user.pk)
+
     ###### usefull variables #############
-    ### just find out how many bids do the current user passed  on the actual auction
+    ### just find out how many bids do the current user passed  on the actual auction*
     name = []
     nb = 0
     for i in current_auction_bids:
@@ -119,7 +128,9 @@ def item(request, auction_id):
     return render(request, 'auctions/item.html',{
         'current_auction' : current_auction,
         'current_auction_bids' : current_auction_bids,
-        'current_auction_bids_by_user' : nb
+        'current_auction_bids_by_user' : nb,
+        'current_auction_comments' : current_auction_comments,
+        'current_auction_related_watchlist' : current_auction_related_watchlist_users_list
     })
 
 def pass_bid(request):
@@ -133,3 +144,42 @@ def pass_bid(request):
         new_bid.save()
 
         return HttpResponseRedirect(next)
+
+def add_comment(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        content = request.POST['content']
+        user_id = request.POST['comment_user']
+        user = User.objects.all().get(pk = user_id)
+        auction_id = request.POST['comment_auction']
+        auction = Auction.objects.all().get(pk = auction_id)
+        next = request.POST['next']
+
+        ##print(f'{auction}')
+        ### create comment
+
+        new_comment = Comment(title= title, content = content, related_auction = auction, related_user = user)
+        new_comment.save()
+        return HttpResponseRedirect(next)
+
+def watchlist(request):
+    if request.method == 'POST':
+        user = request.user.pk
+        action = request.POST['state']
+        auction_id = request.POST['auction']
+        next = request.POST['next']
+
+        #if the action is add , we will crete if already not and update the watchlist 
+        if action == 'add':
+            user_list , created = Watclist.objects.get_or_create(user = request.user)
+            user_list.items.add(auction_id)
+
+            return HttpResponseRedirect(next)
+
+        #remove the item from the watchlist
+        elif action == 'remove':
+            user_list = Watclist.objects.get(user = request.user)
+            user_list.items.remove(auction_id)
+            
+            return HttpResponseRedirect(next)
+

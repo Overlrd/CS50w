@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -73,7 +74,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
-
+@login_required
 def new_listing(request):
     if request.method == "POST":
         form = request.POST
@@ -162,9 +163,8 @@ def add_comment(request):
         new_comment.save()
         return HttpResponseRedirect(next)
 
-def watchlist(request):
+def update_watchlist(request):
     if request.method == 'POST':
-        user = request.user.pk
         action = request.POST['state']
         auction_id = request.POST['auction']
         next = request.POST['next']
@@ -183,3 +183,31 @@ def watchlist(request):
             
             return HttpResponseRedirect(next)
 
+
+def watchlist(request):
+    # i think i will redirect to the listing but filter  for only items user add to his watchist
+    user_watchlist = Watclist.objects.get(user = request.user).items.all()
+    print(user_watchlist)
+
+    return render(request, "auctions/watchlist.html", {
+'auctions' : user_watchlist
+})
+
+def toast(request):
+    return render (request, "auctions/toast.html")
+
+def close_auction(request):
+    if request.method == 'POST':
+        shall_close = request.POST['auction_id']
+        next = request.POST['next']
+        if shall_close :
+            ## update the speific auction by closing it 
+            updated_auction = Auction.objects.all().filter(pk = shall_close)
+            updated_auction.update(is_open = False)
+            print(updated_auction)
+            return HttpResponseRedirect(next)
+
+
+def category(request):
+    
+    return render(request, 'auctions/category.html')

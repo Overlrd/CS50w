@@ -7,6 +7,15 @@ now = datetime.now()
 class User(AbstractUser):
     pass
 
+
+class Category(models.Model):
+    title = models.CharField(max_length=26)
+    description = models.CharField(max_length=126)
+    img_url = models.CharField(max_length=126)
+
+    def __str__(self):
+        return f'Category {self.title} , {self.description}'
+
 ########## Creating auctions model
 
 class Auction(models.Model):
@@ -29,7 +38,10 @@ class Auction(models.Model):
     image_url = models.CharField(max_length=64, blank=True)
 
     #category , a charfield 
-    category = models.CharField(max_length=64,  blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    #status: opened or not
+    is_open = models.BooleanField(default=True)
 
     #date posted
     date = models.DateTimeField(default=now)
@@ -79,3 +91,16 @@ class Watclist(models.Model):
 
     def __str__(self):
         return f'{self.user}"s watchlist containing {self.items}' 
+
+
+###### Create notififcation model
+#https://stackoverflow.com/questions/72264677/how-can-i-implement-notifications-system-in-django
+""" class Notification(models.Model):
+    is_read = models.BooleanField(default=False)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_notification')
+
+    def __str__(self):
+        return f'' """
+

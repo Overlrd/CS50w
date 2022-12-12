@@ -1,5 +1,6 @@
 {% extends "auctions/layout.html" %}
-
+{% block title %} Create auction {% endblock title %} 
+{% block header %} Create a new Auction {% endblock header %}  
 {% block body %}
 
 <form action="{% url 'new_listing' %}" method="post">

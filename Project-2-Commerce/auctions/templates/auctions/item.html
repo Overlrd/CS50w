@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
 
-{% block title %} Item {{current_auction.pk}} {% endblock title %} 
+{% block title %} 
+Auction: {{current_auction.title}}
+{% endblock title %} 
+
+{% block header %} Auction {% endblock header %}  
 
 {% block script %} 
 <script>
@@ -14,9 +18,19 @@
         if(Number(bid) < Number(best_bid)){
             alert("Your bid  must be greater than the Current bid ")
             return false
+        }
+    }
+
+    document.querySelector("#close_auction").onsubmit = () => {
+        console.log('close form submitted')
+        let ConfirmAction = confirm("Are you sure you want to close this auction ?")
+        if (ConfirmAction){
+            alert('Auction deleted')
+        }else{
+            alert('Auction not deleted')
+            return false
 
         }
-
     }
 
 </script>
@@ -26,9 +40,10 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container" style=''>
 
-    <div id="sub_container" class="row" style=" display: flex; margin-bottom: 100px;">
+
+    <div id="sub_container" class="row" style="display: flex; margin-bottom: 100px;">
         <!--Image container-->
         <div class='image_container' style="width: 40%; margin: 0 auto;">
             <img class="card-img-top" 
@@ -45,19 +60,29 @@
         <!--Info and details container-->
 
         <div class="col-sm info_container" style="text-align: center; display: flex;  flex-direction: column;" >
-            <h1> {{ current_auction.title }} </h1>
+            <h1> {{ current_auction.title }} 
+                {% if current_auction.is_open == False %}
+                    (Closed)
+                {% endif %}
+            </h1> 
             <p> {{ current_auction.description }} </p>
             <small>Opened on {{ current_auction.date }} by {{ current_auction.user }}</small>
 
             <div class="col-sm" style=" align-items: center; display: flex; width: 100%;  ">
 
-                <div class="actual_bid col-sm" style="width: auto;">
+                <div id='show_bids' class="actual_bid col-sm" style="width: auto;">
                     <small>Staring bid : {{current_auction.starting_bid}} $</small>
                     <div  style="font-size: 20px;">Current bid : {{ current_auction_bids.first.value }} $</div>
 
                     
                     {% if current_auction_bids.first.related_user.username == request.user.username  %}
-                    <h4> Passed by : You </h4>
+                    <h4>
+                        {% if current_auction.is_open == False %}
+                        Won 
+                        {% else %}
+                        Passed
+                        {% endif %}
+                        by: You </h4>
 
                     {% else %}
                     <h4> Passed by : {{ current_auction_bids.first.related_user }} </h4>
@@ -65,24 +90,31 @@
                     {% endif %}
 
                 </div>
-                
+    
+
+
                 <div class="actual_bid" style=" height: 60%; width: 60%; padding-left: 20px; ">
-                    <h3>Put a bid </h3>
                 {% if user.is_authenticated %}
+                    {% if current_auction.is_open %}
+                    <h3>Put a bid </h3>
                     <div  style="display: block; place-items: center; " >
-                       <form action="{% url 'bid' %}" method="post" id="bid_form">
-                            {% csrf_token %}
-                        <input id="bid_value" name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
-                        <input type="hidden" name="next" value="{{ request.path }}">
-                        <input type="hidden" name="current_auction" value="{{ current_auction.pk }}">
-                        <input id="best_bid" type="hidden" name="best_bid" value="{{ current_auction_bids.first.value }}">
-                        <div style="padding-top: 10px;">
-                            <input id='submit_input' class="btn btn-primary" type="submit" value="Put a bid">
+                        <form action="{% url 'bid' %}" method="post" id="bid_form">
+                             {% csrf_token %}
+                         <input id="bid_value" name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
+                         <input type="hidden" name="next" value="{{ request.path }}">
+                         <input type="hidden" name="current_auction" value="{{ current_auction.pk }}">
+                         <input id="best_bid" type="hidden" name="best_bid" value="{{ current_auction_bids.first.value }}">
+                         <div style="padding-top: 10px;">
+                             <input id='submit_input' class="btn btn-primary" type="submit" value="Put a bid">
+ 
+                         </div>
+ 
+                     </div>
+                     </form>
+                    {% else %}
+                     <h3>Auction closed<h3/>
+                    {% endif %}
 
-                        </div>
-
-                    </div>
-                    </form>
                 
                 {% else %}
                     Sign in to put a bid
@@ -101,7 +133,7 @@
             {% endif %} 
                 <p> {{ current_auction_bids|length }} bid(s) so far </p> 
 
-                <form action=" {% url 'watchlist' %} " method='post' >
+                <form action=" {% url 'update_watchlist' %} " method='post' >
                         {% csrf_token %}
                     <p> You have {{current_auction_bids_by_user}} bid(s) here !</p>
 
@@ -116,7 +148,26 @@
                         <input type="submit" class="btn btn-primary" value='Add to Watchlist' />
                     {% endif %}
 
+
                 </form>
+
+                <!--if the current user is the one who creted the auction-->
+                {% if current_auction.user == request.user %}
+                    <!--if the auction is still open-->
+                    {% if current_auction.is_open != False %}
+                        <div style="padding-top: 20px;">
+                            <form id="close_auction" method="post" action="{% url 'close' %}">
+                                    {% csrf_token %}
+                                <input type="hidden" name="auction_id" value="{{current_auction.pk}}">
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <input value="close this auction" type="submit" class="btn btn-danger">
+                            </form>
+                        </div>
+                    {% endif %}
+
+
+
+                {% endif %}
 
 
             </div>

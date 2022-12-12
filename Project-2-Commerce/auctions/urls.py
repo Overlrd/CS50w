@@ -17,7 +17,15 @@ urlpatterns = [
     path('bid', views.pass_bid, name='bid'),
     #add comment
     path('comment', views.add_comment, name='comment'),
-    #watchlist
-    path('watchlist', views.watchlist, name='watchlist')
+    #add or remove item from watchlist
+    path('update_watchlist', views.update_watchlist, name='update_watchlist'),
+    #show user watchlist
+    path("watchlist", views.watchlist , name="watchlist"),
+    #close an auction
+    path('close', views.close_auction, name='close'),
+    #notification content
+    path('toast', views.toast, name='toast'),
+    #category page
+    path('category', views.category, name='category')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

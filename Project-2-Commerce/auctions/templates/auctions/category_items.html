@@ -1,0 +1,8 @@
+{% extends "auctions/layout.html" %}
+{% block title %}{{category.title}}{% endblock title %} 
+{% block header %}{{category.title}} {% endblock header %}  
+{% block small %} Latest {{category.title}} Listings for you {% endblock small %}
+
+{% block body %}
+    {% include 'auctions/list_layout.html' %}
+{% endblock %}

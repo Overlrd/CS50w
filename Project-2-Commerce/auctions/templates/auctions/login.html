@@ -1,24 +1,44 @@
 {% extends "auctions/layout.html" %}
-
+{% block title %} Login {% endblock title %} 
+{% block header %} Login to your account {% endblock header %}  
+{% block small %}you need to be logged in to post auctions{% endblock small %}
 {% block body %}
 
-    <h2>Login</h2>
+<style>
+        .container a {
+        color: blue!important;
+    }
+    .container a:hover{
+        color: #05a081!important;
+    }
+    form input{
+        border: solid 1px gray!important;
+    }
+</style>
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+<div class="container">
+    <div class="sub-container">
+        <div class="form-conatiner" style="padding-top: 10%;">
+            {% if message %}
+                <div>{{ message }}</div>
+            {% endif %}
+        
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <input class="btn btn-primary" type="submit" value="Login">
+            </form>
+        
+            Don't have an account? <a href="{% url 'register' %}">Register here.</a>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
+    </div>
+</div>
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+
 
 {% endblock %}

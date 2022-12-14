@@ -1,19 +1,21 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Auctions{% endblock %}</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>{% block title %}{% endblock title %}</title> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">       
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            {% load static %}
-        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+
+        <script src="https://kit.fontawesome.com/275fc2985a.js" crossorigin="anonymous"></script>
+
+
+        <link type="text/css" rel="stylesheet" href="{% static 'auctions/style.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
         <style>
+
             @media screen and (max-width : 600px) {
 
                 #sub_container{
@@ -30,79 +32,146 @@
         
         }
 
-        .notification {
-            color: white;
-            text-decoration: none;
-            position: relative;
-            display: inline-block;
-            border-radius: 2px;
+
+            .nav li a,  a:visited, a:active{
+                text-decoration: none;
+                color: white!important;
+                
             }
 
-            .notification:hover {
-            background: rgb(158, 170, 179);
+            .nav li a:hover{
+                color: #05a081!important;
             }
 
-            .notification .badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            padding: 5px 10px;
-            border-radius: 50%;
-            background: red;
-            color: white;
+            .nav-item a{
+                text-decoration: none;
+                color: white;
             }
+            .btn-primary{
+                    background-color: #05a081 !important;
+                    border: #fff 1px solid !important;
+                }
+            .btn-primary:hover{
+                background-color: #343a40!important;
+            }
+
+            .dropdown-menu a:hover{
+                color: #05a081!important;
+            }
+
+            footer{
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #343a40;
+                height: auto;
+                width: 100vw;
+                font-family: "Open Sans";
+                padding-top: 40px;
+                color: #fff;
+            }
+            .footer-content{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-content h3{
+                font-size: 1.8rem;
+                font-weight: 400;
+                text-transform: capitalize;
+                line-height: 3rem;
+            }
+            .footer-content p{
+                max-width: 500px;
+                margin: auto;
+                line-height: 28px;
+                font-size: 14px;
+            }
+                .socials{
+                    list-style: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 1rem 0 3rem 0;
+                }
+                .socials li{
+                    margin: 0 10px;
+                }
+                .socials a{
+                    text-decoration: none;
+                    color: #fff;
+                }
+                .socials a i{
+                    font-size: 1.1rem;
+                    transition: color .4s ease;
+
+                }
+                .socials a:hover i{
+                    color: #05a081;
+                }
+            
         </style>
 
 
 
-    <body style="">
-        <h1> {% block header %}Auctions{% endblock header %} </h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
-        <ul class="nav" style="">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-            {% if user.is_authenticated %}
-
+    <body  style="height: 100%; padding: 0 10px 0 10px;">
+        <nav class="navbar navbar-dark bg-dark">
+            <ul class="nav" >
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'new_listing' %}">Create Listing</a>
+                    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
                 </li>
+                {% if user.is_authenticated %}
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'new_listing' %}">Create Listing</a>
+                    </li>
 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'category' %}">Categories</a>
-                </li>
+                    <li class="nav-item notification" >
+                        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    </li>
 
-                <!--Notification bell-->
-                {% include 'auctions/toast.html' %}
 
-            
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category' %}">Categories</a>
+                    </li>
                 
+<!--                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+ -->
+                    
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+            {% if user.is_authenticated %}
+            <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Signed in as <strong>{{ user.username }}</strong>.
+                    </a>
+                    <div class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink" style="background-color: black; text-align: center; border-radius: 10px;">
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </div>
+            </div>
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
+               <p style="color: white;">Not signed in.</p> 
             {% endif %}
-        </ul>
-        <!--Toast-->
+
+        </nav>
+        <div style="background-color: #f7f7f7; text-align: center;">
+            <h1 style="text-transform: uppercase; color:rgb(10, 9, 9); "> {% block header %}{% endblock header %} </h1>
+            <h5 style="font-size: 18px;">{% block small %}  {% endblock small %}</h5>
+        </div>
 
         <hr>     
         {% block body %}
@@ -110,6 +179,21 @@
 
         {% block script %}
         {% endblock %}
+
+        <div style="padding-top: 10%;">
+            <footer>
+                <div class="footer-content">
+                    <h3>coded with <i class="fa fa-heart"></i></h3>
+                    <p style="color: white!important;" >My Networks</p>
+                    <ul class="socials">
+                        <li><a href="https://twitter.com/@Overlrd_"><i class="fa-brands fa-twitter"></i></a></li>
+                        <li><a href="https://github.com/Overlrd"><i class="fa-brands fa-github"></i></a></li>
+                        <li><a href="https://discord.com/channels/@S8d00#8869"><i class="fa-brands fa-discord"></i></a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+
         
     </body>
 </html>

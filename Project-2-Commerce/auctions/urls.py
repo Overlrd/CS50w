@@ -23,9 +23,9 @@ urlpatterns = [
     path("watchlist", views.watchlist , name="watchlist"),
     #close an auction
     path('close', views.close_auction, name='close'),
-    #notification content
-    path('toast', views.toast, name='toast'),
     #category page
-    path('category', views.category, name='category')
+    path('category', views.category, name='category'),
+    #category items
+    path('<int:category_id>/category_items', views.list_categories, name='category_items')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

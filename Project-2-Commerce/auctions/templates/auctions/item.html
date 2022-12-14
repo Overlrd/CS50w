@@ -1,10 +1,9 @@
 {% extends "auctions/layout.html" %}
 
-{% block title %} 
-Auction: {{current_auction.title}}
-{% endblock title %} 
+{% block title %} Auction: {{current_auction.title}}{% endblock title %} 
 
 {% block header %} Auction {% endblock header %}  
+{% block small %} Latest {{current_auction.category.title}} auctions for you {% endblock small %}
 
 {% block script %} 
 <script>
@@ -34,6 +33,21 @@ Auction: {{current_auction.title}}
     }
 
 </script>
+<style>
+    .card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;}
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+        }
+    p, h5 {
+        color:black;
+    }
+
+</style>
 
 
 {% endblock script %}
@@ -45,12 +59,12 @@ Auction: {{current_auction.title}}
 
     <div id="sub_container" class="row" style="display: flex; margin-bottom: 100px;">
         <!--Image container-->
-        <div class='image_container' style="width: 40%; margin: 0 auto;">
+        <div class='image_container' style="width: 100%; margin: 0 auto; object-fit: cover;">
             <img class="card-img-top" 
             {% if current_auction.image_url|length > 1 %}
             src="{{current_auction.image_url}}" 
             {% else %}
-            src="https://i.imgur.com/j4El531.png" 
+            src="{{current_auction.category.img_url}}" 
             {% endif %}
 
             
@@ -72,21 +86,25 @@ Auction: {{current_auction.title}}
 
                 <div id='show_bids' class="actual_bid col-sm" style="width: auto;">
                     <small>Staring bid : {{current_auction.starting_bid}} $</small>
-                    <div  style="font-size: 20px;">Current bid : {{ current_auction_bids.first.value }} $</div>
-
-                    
-                    {% if current_auction_bids.first.related_user.username == request.user.username  %}
-                    <h4>
+                    <div  style="font-size: 20px;">
                         {% if current_auction.is_open == False %}
-                        Won 
+                            Final bid :
                         {% else %}
-                        Passed
+                            Current bid : 
                         {% endif %}
-                        by: You </h4>
+                        
+                    {{ current_auction_bids.first.value }} $</div>
 
+                    {% if current_auction.is_open == False %}
+                        <h4> Won by 
+                            {% if current_auction_bids.first.related_user.username == request.user.username %}
+                                You
+                            {% else %}
+                            {{current_auction_bids.first.related_user.username}} 
+                            {% endif %}
+                        </h4>
                     {% else %}
-                    <h4> Passed by : {{ current_auction_bids.first.related_user }} </h4>
-
+                        <h4> Passed by : {{ current_auction_bids.first.related_user }} </h4>
                     {% endif %}
 
                 </div>
@@ -112,7 +130,7 @@ Auction: {{current_auction.title}}
                      </div>
                      </form>
                     {% else %}
-                     <h3>Auction closed<h3/>
+                     <h3>Auction closed</h3>
                     {% endif %}
 
                 
@@ -226,21 +244,31 @@ Auction: {{current_auction.title}}
       </div>
 
     <!-- Similar Items-->
-   <div class="more_container" style="width: auto; margin-top: 100px; margin-bottom: 100px;">
-        <small>Similar Items</small>
+    <div class="more_container" style="width: auto; margin-top: 100px; margin-bottom: 100px;">
+        <h3>Similar Items</h3>
 
+            <div style="padding-top: 2%;" class="row row-cols-1 row-cols-md-2">
+                {% for similar_item in similar_items %}
+                    {% if similar_item.is_open %}
+                    <a href="{% url 'item' similar_item.pk %}" style='text-decoration: inherit;'>
+                        <div class="col mb-4">
+                            <div class="card">
+                            <img  src="{{similar_item.image_url}}" class="card-img-top" alt="Category image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{similar_item.title}}</h5>
+                                <p class="card-text">{{similar_item.description}}</p>
+                            </div>
+                            </div>
+                        </div>
+                    </a>    
+                    {% endif %}
 
-        <div class="card-group">
-            <div class="card">
-              <img class="card-img-top" src="..." alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                {% endfor %}
               </div>
+
             </div>
-          </div>
-    </div>
+
+        </div>
 
 </div>
 

@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms 
-from .models import User, Auction, Bid, Comment, Watclist
+from .models import User, Auction, Bid, Comment, Watclist, Category
 
 ##### Form
 class NewTaskForm(forms.Form):
@@ -18,7 +18,6 @@ class NewTaskForm(forms.Form):
 
 
 def index(request):
-
     return render(request, "auctions/index.html", {
         'auctions' : Auction.objects.all()
     })
@@ -74,17 +73,23 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
 @login_required
 def new_listing(request):
+    categories = Category.objects.all()
     if request.method == "POST":
         form = request.POST
         title = form['title']
         description = form['description']
-        category = form['category']
+        category_id = form['category']
+        ##get the category
+        category = Category.objects.all().get(pk = category_id)
         bid = form['bid']
         img_url = form['img_url']
         current_user = request.user
 
+        if len(img_url) < 1:
+            img_url = category.img_url
         #### Create Auction
 
         new_auction = Auction(title = title, description = description, user = current_user, starting_bid = bid, 
@@ -97,7 +102,9 @@ def new_listing(request):
 
     else:
         print('form not passed with post')
-        return render(request, "auctions/new_listing.html")
+        return render(request, "auctions/new_listing.html", {
+            'categories': categories
+        })
 
 def item(request, auction_id):
 
@@ -125,13 +132,17 @@ def item(request, auction_id):
     for i in name:
         if request.user.username == i:
             nb += 1
+    ###similar items, excluding the current item
+    auction_category = current_auction.category
+    similar_items = auction_category.category_auctions.all().exclude(pk = auction_id)
     #### return the result
     return render(request, 'auctions/item.html',{
         'current_auction' : current_auction,
         'current_auction_bids' : current_auction_bids,
         'current_auction_bids_by_user' : nb,
         'current_auction_comments' : current_auction_comments,
-        'current_auction_related_watchlist' : current_auction_related_watchlist_users_list
+        'current_auction_related_watchlist' : current_auction_related_watchlist_users_list,
+        'similar_items': similar_items
     })
 
 def pass_bid(request):
@@ -186,15 +197,14 @@ def update_watchlist(request):
 
 def watchlist(request):
     # i think i will redirect to the listing but filter  for only items user add to his watchist
-    user_watchlist = Watclist.objects.get(user = request.user).items.all()
-    print(user_watchlist)
-
+    user_watchlist = ''
+    try :
+        user_watchlist = Watclist.objects.get(user = request.user).items.all()
+    except :
+        user_watchlist = None
     return render(request, "auctions/watchlist.html", {
 'auctions' : user_watchlist
 })
-
-def toast(request):
-    return render (request, "auctions/toast.html")
 
 def close_auction(request):
     if request.method == 'POST':
@@ -204,10 +214,19 @@ def close_auction(request):
             ## update the speific auction by closing it 
             updated_auction = Auction.objects.all().filter(pk = shall_close)
             updated_auction.update(is_open = False)
-            print(updated_auction)
             return HttpResponseRedirect(next)
 
 
 def category(request):
-    
-    return render(request, 'auctions/category.html')
+    categories = Category.objects.all()
+    return render(request, 'auctions/category.html', {
+        'categories': categories
+    })
+
+def list_categories(request, category_id):
+    current_category = Category.objects.get(pk = category_id)
+    items = current_category.category_auctions.all()
+    return render(request, 'auctions/category_items.html', {
+        'category' : current_category,
+        'auctions' : items
+    })

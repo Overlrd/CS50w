@@ -1,52 +1,65 @@
 {% extends "auctions/layout.html" %}
 {% block title %} Create auction {% endblock title %} 
-{% block header %} Create a new Auction {% endblock header %}  
+{% block header %} Create &nbsp a &nbsp new &nbsp Auction {% endblock header %}  
+{% block small %} add a new auction to the listing {% endblock small %} 
+
+
+
 {% block body %}
 
-<form action="{% url 'new_listing' %}" method="post">
-    {% csrf_token %}
-    <div class="form-row">
+<style>
+    .form-group input, select{
+        border: solid 1px gray !important;
+    }
+</style>
 
-      <div class="form-group col-md-4">
-          <label for="inputTitle">Title</label>
-          <input name='title' type="text" class="form-control" id="inputTitle" placeholder="eg Google" required>
-      </div>
+<div class="container" style="width: 100%; border-radius: 20px;">
+    <div class="sub-container" style="width: auto; border-radius: 20px;
+        ">
+        <div class="form-container" style="padding-top: 5%;">
+            <form action="{% url 'new_listing' %}" method="post">
+                {% csrf_token %}
 
-      <div class="form-group col-md-4">
-          <label for="inputPassword4">Category</label>
-          <select class="form-control" name='category'>
-              <option value = '' >Select a category</option>
-              <option value="electronics">Electronics</option>
-              <option value="fashion">Fashion</option>
-              <option value="home">Home</option>
-              <option value="toys">Toys</option>
-              <option value="other">Other</option>
-          </select>      
-      </div>
+                <div class="form-row">
+                    <div style="border-radius: 10px;" class="form-group col-md-12">
+                        <img style="object-fit: cover;" width="100%" height="120px" src="https://i.imgur.com/aVvRlCC.jpg" alt="Photo de Hiren Lad" srcset="">
+                    </div>
 
-      <div class="form-group col-md-4">
-        <label for="inputbid">Starting Bid</label>
-        <input name='bid' type="number" class="form-control" placeholder='1 $' id="inputbid" min="1"  max="10000" required>
-      </div>
+                  <div class="form-group col-md-6">
+                    <label for="inputEmail4">Title</label>
+                    <input name="title" type="text" class="form-control" id="inputEmail4" placeholder="Something">
+                  </div>
+                  <div class="form-group col-md-4">
+                        <label for="inputCategory">Category</label>
+                        <select id="inputCategory" class="form-control" name='category' required>
+                            <option value ='' >Select a category</option>
+                            {% for category in categories %}
+                                    <option value = '{{category.pk}}' >{{category.title}}</option>
+                            {% endfor %}
+            
+                        </select>  
+                  </div>
+                  <div class="form-group col-md-2">
+                    <label for="inputbid">Starting Bid</label>
+                    <input name="bid" type="number" class="form-control" id="inputbid" placeholder="10 $" min="1"  max="10000" required>
+                  </div>
 
-  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription">Description</label>
+                  <input name="description" type="text" class="form-control" id="inputDescription" placeholder="Something's Description">
+                </div>
+                <div class="form-group">
+                  <label for="inputImgurl">Image URL</label>
+                  <input name="img_url" type="text" class="form-control" id="inputImgurl" placeholder="https://i.imgur.com/vIJF0PY.png">
+                </div>
 
-
-      <div class="form-group">
-          <label>Descritpion</label>
-          <input type="text" name='description' class="form-control">
-      </div>
-
-      <div class="form-group">
-          <label for="inputurl">Image url</label>
-          <input name='img_url'  type="text" class="form-control" id="inputurl" placeholder="https://imgur.img.com">
-      </div>
-
-    <button type="submit" class="btn btn-primary">Post auction</button>
-
-</form>
+                <button style="width: 10%;" type="submit" class="btn btn-primary">Post Listing</button>
+              </form>
+        </div>
+    </div>
+</div>
 
 {% endblock body %}
-
 
 

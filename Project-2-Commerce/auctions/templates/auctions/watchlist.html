@@ -2,8 +2,36 @@
 
 {% block title %} Watchlist{% endblock title %} 
 {% block header %} Watchlist {% endblock header %}  
+{% block small %} Listings you're following {% endblock small %} 
+
 {% block body %}
 
-    {% include 'auctions/list_layout.html' %}
-    
+<div class="row">
+    {% for auction in auctions %}
+    <!--Display only active auctions-->
+        <div class='col-sm-3' >
+            <div class="card">
+                <a href=' {% url "item" auction.pk %}  '> <img class="card-img-top" src="{{auction.image_url}}" alt="Card image cap" style='width:100%; height:200px;'> </a>
+
+                <div class="card-body" >
+                    
+                    <h5 class="card-title">{{auction.title}}
+                        {% if auction.is_open == False %}
+                            (Closed)
+                        {% endif %}
+                    </h5>
+                    <p class="card-text"> {{auction.description}} </p>
+                    <a href="{% url 'item' auction.pk %}" class="btn btn-primary">View</a>
+                    <p class="card-text"><small class="text-muted">Last updated {{auction.date}} by 
+                        {% if auction.user == request.user%}
+                            you
+                        {% else %}
+                            {{auction.user}}
+                        {% endif %}
+                    </small></p>
+                </div>
+        </div>
+    </div>     
+    {% endfor %}
+</div>
 {% endblock %}

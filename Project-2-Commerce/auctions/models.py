@@ -33,12 +33,14 @@ class Auction(models.Model):
     #starting _bid , and integer fiels
     starting_bid = models.IntegerField()
 
+    #current price
+
     #image : a charfield for the url of the image
     # wew on't store the image itself, just it's link
     image_url = models.CharField(max_length=64, blank=True)
 
     #category , a charfield 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_auctions')
 
     #status: opened or not
     is_open = models.BooleanField(default=True)
@@ -95,12 +97,11 @@ class Watclist(models.Model):
 
 ###### Create notififcation model
 #https://stackoverflow.com/questions/72264677/how-can-i-implement-notifications-system-in-django
-""" class Notification(models.Model):
+class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_notification')
 
     def __str__(self):
-        return f'' """
-
+        return f'{self.user} s notifications' 

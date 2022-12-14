@@ -17,3 +17,6 @@ to do
 ## If a user is signed in on a closed listing page, and the user has won that auction, the page should say so.
 
 ## i think in should add a status filed to the auction model , a boolean for if the auction is opened or not
+
+## complte styling
+# add footer

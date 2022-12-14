@@ -1,0 +1,278 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %} Auction: {{current_auction.title}}{% endblock title %} 
+
+{% block header %} Auction {% endblock header %}  
+{% block small %} Latest {{current_auction.category.title}} auctions for you {% endblock small %}
+
+{% block script %} 
+<script>
+
+
+    document.querySelector('#bid_form').onsubmit = () => {
+        console.log('form submitted')
+        let bid = document.querySelector('#bid_value').value ;
+        let best_bid = document.querySelector('#best_bid').value ;
+
+        if(Number(bid) < Number(best_bid)){
+            alert("Your bid  must be greater than the Current bid ")
+            return false
+        }
+    }
+
+    document.querySelector("#close_auction").onsubmit = () => {
+        console.log('close form submitted')
+        let ConfirmAction = confirm("Are you sure you want to close this auction ?")
+        if (ConfirmAction){
+            alert('Auction deleted')
+        }else{
+            alert('Auction not deleted')
+            return false
+
+        }
+    }
+
+</script>
+<style>
+    .card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;}
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+        }
+    p, h5 {
+        color:black;
+    }
+
+</style>
+
+
+{% endblock script %}
+
+{% block body %}
+
+<div class="container" style=''>
+
+
+    <div id="sub_container" class="row" style="display: flex; margin-bottom: 100px;">
+        <!--Image container-->
+        <div class='image_container' style="width: 100%; margin: 0 auto; object-fit: cover;">
+            <img class="card-img-top" 
+            {% if current_auction.image_url|length > 1 %}
+            src="{{current_auction.image_url}}" 
+            {% else %}
+            src="{{current_auction.category.img_url}}" 
+            {% endif %}
+
+            
+            alt="Card image cap"  style="width:100%; height:300px;"> 
+        </div>
+
+        <!--Info and details container-->
+
+        <div class="col-sm info_container" style="text-align: center; display: flex;  flex-direction: column;" >
+            <h1> {{ current_auction.title }} 
+                {% if current_auction.is_open == False %}
+                    (Closed)
+                {% endif %}
+            </h1> 
+            <p> {{ current_auction.description }} </p>
+            <small>Opened on {{ current_auction.date }} by {{ current_auction.user }}</small>
+
+            <div class="col-sm" style=" align-items: center; display: flex; width: 100%;  ">
+
+                <div id='show_bids' class="actual_bid col-sm" style="width: auto;">
+                    <small>Staring bid : {{current_auction.starting_bid}} $</small>
+                    <div  style="font-size: 20px;">
+                        {% if current_auction.is_open == False %}
+                            Final bid :
+                        {% else %}
+                            Current bid : 
+                        {% endif %}
+                        
+                    {{ current_auction_bids.first.value }} $</div>
+
+                    {% if current_auction.is_open == False %}
+                        <h4> Won by 
+                            {% if current_auction_bids.first.related_user.username == request.user.username %}
+                                You
+                            {% else %}
+                            {{current_auction_bids.first.related_user.username}} 
+                            {% endif %}
+                        </h4>
+                    {% else %}
+                        <h4> Passed by : {{ current_auction_bids.first.related_user }} </h4>
+                    {% endif %}
+
+                </div>
+    
+
+
+                <div class="actual_bid" style=" height: 60%; width: 60%; padding-left: 20px; ">
+                {% if user.is_authenticated %}
+                    {% if current_auction.is_open %}
+                    <h3>Put a bid </h3>
+                    <div  style="display: block; place-items: center; " >
+                        <form action="{% url 'bid' %}" method="post" id="bid_form">
+                             {% csrf_token %}
+                         <input id="bid_value" name="bid_value" required type="number" class="form-control form-control-sm" min="{{current_auction.starting_bid}}" style="width: 50%; margin: 0 auto;">
+                         <input type="hidden" name="next" value="{{ request.path }}">
+                         <input type="hidden" name="current_auction" value="{{ current_auction.pk }}">
+                         <input id="best_bid" type="hidden" name="best_bid" value="{{ current_auction_bids.first.value }}">
+                         <div style="padding-top: 10px;">
+                             <input id='submit_input' class="btn btn-primary" type="submit" value="Put a bid">
+ 
+                         </div>
+ 
+                     </div>
+                     </form>
+                    {% else %}
+                     <h3>Auction closed</h3>
+                    {% endif %}
+
+                
+                {% else %}
+                    Sign in to put a bid
+                {% endif %}
+            </div>                
+
+    
+            </div>
+
+
+            <div class="add_content" 
+            {% if user.is_authenticated %}
+                style="padding-top: 15%; ">
+            {% else %}
+                style="padding-top: 15%; display: none;">
+            {% endif %} 
+                <p> {{ current_auction_bids|length }} bid(s) so far </p> 
+
+                <form action=" {% url 'update_watchlist' %} " method='post' >
+                        {% csrf_token %}
+                    <p> You have {{current_auction_bids_by_user}} bid(s) here !</p>
+
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    {% if request.user.pk in current_auction_related_watchlist %}
+                        <input type="hidden" name="auction" value="{{ current_auction.pk }}">
+                        <input type="hidden" name="state" value="remove">
+                        <input type="submit" class="btn btn-danger" value='Remove From Watchlist '/>
+                    {% else %}
+                        <input type="hidden" name="auction" value="{{ current_auction.pk }}">
+                        <input type="hidden" name="state" value="add">
+                        <input type="submit" class="btn btn-primary" value='Add to Watchlist' />
+                    {% endif %}
+
+
+                </form>
+
+                <!--if the current user is the one who creted the auction-->
+                {% if current_auction.user == request.user %}
+                    <!--if the auction is still open-->
+                    {% if current_auction.is_open != False %}
+                        <div style="padding-top: 20px;">
+                            <form id="close_auction" method="post" action="{% url 'close' %}">
+                                    {% csrf_token %}
+                                <input type="hidden" name="auction_id" value="{{current_auction.pk}}">
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <input value="close this auction" type="submit" class="btn btn-danger">
+                            </form>
+                        </div>
+                    {% endif %}
+
+
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Comments -->
+
+    <div id="accordion" style="margin-bottom: 10px;">
+        <h2>Comments({{current_auction_comments|length}})</h2>
+        <form 
+        {% if user.is_authenticated %}
+            style="padding-bottom:50px ; " action="{% url 'comment' %}" method='POST' >
+        {% else %}
+            style="display:none; "
+        {% endif %}
+                {% csrf_token %}
+            <div class="form-group" >
+              <label>Title</label>
+              <input type="text" class="form-control" name="title">
+            </div>
+          
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Content</label>
+              <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div> 
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <input type="hidden" name="comment_user" value="{{ request.user.pk }}">
+                <input type="hidden" name="comment_auction" value="{{ current_auction.pk }}">
+                <input class="btn btn-primary" type="submit" value="Add comment"> 
+            </div>
+          </form>
+
+
+        {% for comment in  current_auction_comments %}
+        <div class="card">
+            <div class="card-header" id="headingOne{{ comment.pk }}">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne{{ comment.pk }}" aria-expanded="false" aria-controls="collapseOne{{ comment.pk }}">
+                    {{ comment.title }}
+                </button>
+              </h5>
+              <small>By {{ comment.related_user }} on {{ comment.date }} </small>
+            </div>
+        
+            <div id="collapseOne{{ comment.pk }}" class="collapse" aria-labelledby="headingOne{{ comment.pk }}" data-parent="#accordion">
+              <div class="card-body">
+                {{ comment.content }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+    <!-- Similar Items-->
+    <div class="more_container" style="width: auto; margin-top: 100px; margin-bottom: 100px;">
+        <h3>Similar Items</h3>
+
+            <div style="padding-top: 2%;" class="row row-cols-1 row-cols-md-2">
+                {% for similar_item in similar_items %}
+                    {% if similar_item.is_open %}
+                    <a href="{% url 'item' similar_item.pk %}" style='text-decoration: inherit;'>
+                        <div class="col mb-4">
+                            <div class="card">
+                            <img  src="{{similar_item.image_url}}" class="card-img-top" alt="Category image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{similar_item.title}}</h5>
+                                <p class="card-text">{{similar_item.description}}</p>
+                            </div>
+                            </div>
+                        </div>
+                    </a>    
+                    {% endif %}
+
+                {% endfor %}
+              </div>
+
+            </div>
+
+        </div>
+
+</div>
+
+{% endblock body %}
+
+
+

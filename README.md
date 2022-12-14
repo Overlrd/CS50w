@@ -5,7 +5,7 @@ CS50’s Web Programming with Python and JavaScript
 
 This repo contains my projects from [CS50’s Web Programming with Python and JavaScript](https://cs50.harvard.edu/web/2020/) course.
 
-## Project 0
+## Project 0 - Search
 This project consist into building a clone for google search respecting a bunch of [specifications](https://cs50.harvard.edu/web/2020/projects/0/search/#specification) . 
 
 The pages styles should resemble to Google's own aesthetics , have the same functionnalities , lile the advanced search options but also the image search and the **I'm feeling lucky** option.

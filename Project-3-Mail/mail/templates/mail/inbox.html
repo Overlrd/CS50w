@@ -12,7 +12,25 @@
     <hr>
 
     <div id="emails-view">
+
     </div>
+
+    <div id="mail-view" class="card">
+        <div id="mail-header" class="card-header">
+            <div style="font-weight:bold;" id='mail-sender'></div>
+            <div style="font-weight:bold;" id='mail-receiver'></div>
+        </div>
+        <div id="card-body-1" class="card-body">
+          <h5 style="font-weight:bold;" id="mail-subject" class="card-title"></h5>
+          <p id="mail-time" class="card-text"></p>
+          <a id="mail-button-reply" href="#" class="btn btn-primary">reply</a>
+          <a id="mail-button-archive" href="#" class="btn btn-secondary">Archive</a>
+        </div>
+        <div id="card-body-2" class="card-body">
+            <p style="font-size: 20px;" id="mail-content" class="card-text"></p>
+        </div>
+
+      </div>
 
     <div id="compose-view">
         <h3>New Email</h3>
@@ -30,6 +48,7 @@
             <input type="submit" class="btn btn-primary"/>
         </form>
     </div>
+
 {% endblock %}
 
 {% block script %}

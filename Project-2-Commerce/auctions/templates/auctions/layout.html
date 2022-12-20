@@ -67,7 +67,7 @@
                 height: auto;
                 width: 100vw;
                 font-family: "Open Sans";
-                padding-top: 40px;
+                padding-top: 30px;
                 color: #fff;
             }
             .footer-content{
@@ -174,15 +174,18 @@
         </div>
 
         <hr>     
-        {% block body %}
-        {% endblock %}
+        <div  style="padding-bottom: 100px; min-height: 400px; position: relative;">
+            {% block body %}
+            {% endblock %}
+    
+            {% block script %}
+            {% endblock %}
+        </div>
 
-        {% block script %}
-        {% endblock %}
 
-        <div style="padding-top: 10%;">
-            <footer>
-                <div class="footer-content">
+        <div style="bottom: 0;">
+            <footer style="">
+                <div class="footer-content" style="">
                     <h3>coded with <i class="fa fa-heart"></i></h3>
                     <p style="color: white!important;" >My Networks</p>
                     <ul class="socials">

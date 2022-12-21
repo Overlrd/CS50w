@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose').addEventListener('click', () => compose_email(null));
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -30,20 +30,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+
 });
 
+
+function animate(){
+  element = document.querySelector('#emails-view');
+  element.style.animationPlayState = 'running';
+}
+
  
-function compose_email() {
+function compose_email(recipients, subject, timestamp, body) {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#mail-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
+  if (recipients == null && subject == null){
+
+
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+}else{
+  document.querySelector('#compose-recipients').value = `${recipients}`;
+  console.log(`compose called with recipient ${recipients},${subject},${body} `)
+
+  if(subject.includes('Re')){
+    document.querySelector('#compose-subject').value = `${subject}`;
+  }else{
+    document.querySelector('#compose-subject').value = `Re :${subject}`;
+
+  }
+  // pre-fill the body
+  document.querySelector('#compose-body').value = `On ${timestamp} ${recipients} wrote ${body}`;
+
+}
+
+
 }
 
 function load_mailbox(mailbox) {
@@ -52,6 +78,10 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#mail-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
+
+  document.getElementById("emails-view").classList.remove("div_to_animate");
+  document.getElementById("emails-view").classList.add("div_to_animate");
+
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)} </h3>`;
@@ -72,6 +102,7 @@ function load_mailbox(mailbox) {
         
         mail_container = document.createElement('div');
         mail_container.id =`mail-container${mail_id}`;
+        mail_container.className += "mail_container";
         
         // styling the new div
         mail_container.style.border = '1px solid black';
@@ -86,11 +117,14 @@ function load_mailbox(mailbox) {
 
 
         if (mailbox == 'inbox'){
-          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} From : ${mail_sender}</div> <div style='margin:10px;'>Object : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
+          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} From : ${mail_sender}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = true ;
 
+          //update notif bail
+
+
         } else {
-          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} To : ${mail_recipients}</div> <div style='margin:10px;'>Object : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
+          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} To : ${mail_recipients}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = false ;
 
         }
@@ -107,11 +141,12 @@ function load_mailbox(mailbox) {
 
       } 
 
+      // view a specific mail
       for (const email of emails){
         // get each mail's div
         const email_id = email['id']
-        curren_div = document.querySelector(`#mail-container${email_id}`)
-        curren_div.addEventListener('click', function(){
+        current_div = document.querySelector(`#mail-container${email_id}`)
+        current_div.addEventListener('click', function(){
           console.log(`${email_id}']} clicked `)
           console.log(`called load_email ( ${email_id} , ${mailbox})`)
           load_email(email_id,mailbox)
@@ -165,6 +200,11 @@ function load_email(email_id, mailbox){
         })
       })
 
+        // reply 
+        document.querySelector('#mail-button-reply').addEventListener('click', function(){
+          compose_email(sender, subject, timestamp, body)
+        })
+
       // archive & unarchive
 
       document.querySelector('#mail-button-archive').addEventListener('click', function(){
@@ -178,9 +218,12 @@ function load_email(email_id, mailbox){
       .then(
         document.location.href="/"
       )
+
+      
     })
 
     })
 
 
 }
+

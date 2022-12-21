@@ -1,18 +1,43 @@
 {% extends "mail/layout.html" %}
 {% load static %}
 
-{% block body %}
-    <h2>{{ request.user.email }}</h2>
+{% block header%}
+<a class="navbar-brand" href="#"><h2>{{ request.user.email }}</h2></a>
+<div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
+    <ul class="navbar-nav nav-pills">
 
-    <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
-    <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
-    <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
-    <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+        <li class="nav-item" >
+            <a class="nav-link btn btn-light" id="inbox">Inbox</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="compose">Compose</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="sent">Sent</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="archived">Archived</a>
+        </li>
+    </ul>
+</div>
+<div class="collapse navbar-collapse justify-content-center">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <span id='notification-badge-text' class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;">5</span> <!-- your badge -->
+            <a class="nav-link" href="#"> <img width="40px" src="https://i.imgur.com/Uaqvn2G.png" alt="notif-bell"> </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" href="{% url 'logout' %}"> <img width="40px" src="https://i.imgur.com/0jwpYJV.png" alt="notif-bell"></a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+
     <hr>
 
     <div id="emails-view">
-
     </div>
 
     <div id="mail-view" class="card">
@@ -42,10 +67,10 @@
                 To: <input id="compose-recipients" class="form-control">
             </div>
             <div class="form-group">
-                <input class="form-control" id="compose-subject" placeholder="Subject">
+                <input style="font: bold; font-size: 30px;" class="form-control" id="compose-subject" placeholder="Subject">
             </div>
-            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input type="submit" class="btn btn-primary"/>
+            <textarea style="font-size: 20px;" class="form-control" id="compose-body" placeholder="Body"></textarea>
+            <input style="color: white;" id='compose-submit' type="submit" class="btn btn-primary" value="Send Mail"/>
         </form>
     </div>
 

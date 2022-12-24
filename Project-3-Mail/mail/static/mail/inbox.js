@@ -24,28 +24,63 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     })
     .then(response => response.json())
-    .then(result => {
-        // Print result
-        alert(`${result}`)
+    // Once the email has been sent, load the user’s sent mailbox.
+    .then(function () {
+      load_mailbox('sent');
     });
-  }
+    }
+  
+    window.onpopstate = function(event){
+    console.log(event.state.mailbox)
+    if (event.state.mailbox == 'compose'){
+      compose_email(null)
+    }else{
+      load_mailbox(event.state.mailbox)
+
+    }}
+
+    // back button on mail view hover and click
+    document.querySelector('#move-back').addEventListener('mouseover', function(){
+      this.style.cursor = 'pointer';
+    })
+
+    document.querySelector('#move-back').addEventListener('click', function(){
+      history.go(-1);
+    })
+
 
 
 });
 
 
-function animate(){
-  element = document.querySelector('#emails-view');
-  element.style.animationPlayState = 'running';
-}
+function animate(view){
+  element = document.querySelector(`${view}`).animate([
+    // keyframes
+    {opacity: '0'},
+    {opacity : '1'}
+  ],
+  // timing options
+  {
+    duration:1000,
+
+  })}
 
  
 function compose_email(recipients, subject, timestamp, body) {
+
+
+  history.pushState({'mailbox':'compose'}, '', `?#`);
+  
+  // animate current view
+  animate('#compose-view')
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#mail-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+
+  // update page title
+  document.querySelector('title').innerHTML = `Mail :${'New Email'}`;
 
   if (recipients == null && subject == null){
 
@@ -67,21 +102,22 @@ function compose_email(recipients, subject, timestamp, body) {
   // pre-fill the body
   document.querySelector('#compose-body').value = `On ${timestamp} ${recipients} wrote ${body}`;
 
-}
-
-
-}
+}}
 
 function load_mailbox(mailbox) {
+
+  history.pushState({'mailbox':mailbox}, '', ``);
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#mail-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
-  document.getElementById("emails-view").classList.remove("div_to_animate");
-  document.getElementById("emails-view").classList.add("div_to_animate");
+  // animate current view
+  animate('#emails-view')
 
+  // update page title
+  document.querySelector('title').innerHTML = `Mail :${mailbox}`;
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)} </h3>`;
@@ -104,12 +140,6 @@ function load_mailbox(mailbox) {
         mail_container.id =`mail-container${mail_id}`;
         mail_container.className += "mail_container";
         
-        // styling the new div
-        mail_container.style.border = '1px solid black';
-        mail_container.style.display = 'flex';
-        mail_container.style.alignItems = 'center';
-        mail_container.style.justifyContent = 'space-between';
-        
         // hover 
         mail_container.addEventListener('mouseover', function(){
           this.style.cursor = 'pointer';
@@ -119,13 +149,14 @@ function load_mailbox(mailbox) {
         if (mailbox == 'inbox'){
           mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} From : ${mail_sender}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = true ;
-
-          //update notif bail
+          swap_text = "Mail Archived";
 
 
         } else {
           mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} To : ${mail_recipients}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = false ;
+          swap_text = "Mail Unarchived";
+
 
         }
 
@@ -156,6 +187,12 @@ function load_mailbox(mailbox) {
 }
 
 function load_email(email_id, mailbox){
+
+    history.pushState({'mailbox':email_id}, '', ``);
+
+    // animate mail view
+    animate('#mail-view')
+
     // Show the mail view and hide other views
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#mail-view').style.display = 'block';
@@ -205,6 +242,8 @@ function load_email(email_id, mailbox){
           compose_email(sender, subject, timestamp, body)
         })
 
+
+
       // archive & unarchive
 
       document.querySelector('#mail-button-archive').addEventListener('click', function(){
@@ -215,9 +254,24 @@ function load_email(email_id, mailbox){
             archived: to_archive
         })
       })
+
       .then(
-        document.location.href="/"
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+      
+          title: `${swap_text}`,
+          showConfirmButton: false,
+          timer: 2000
+        }).then( function(){
+          document.location.href="/"
+
+        } )
       )
+
+
+
+
 
       
     })

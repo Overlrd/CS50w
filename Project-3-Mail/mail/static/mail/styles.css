@@ -1,48 +1,32 @@
 textarea {
-    min-height: 400px;
+    min-height: 250px;
 }
 
 body{
-    overflow: hidden;
+    overflow-x: hidden;
     background-image:url('/static/mail/cropped_backgrounrd.png');
     background-color: #fadbc0;
     background-attachment:fixed;
     background-repeat: no-repeat;
     background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
 }
 
-#emails-view {
+/* view containing emails (inbox , sent , archive) */
+ #emails-view {
     position: relative;
-    background-color: transparent;
     text-align: center;
     font-size: 20px;
-    background-color:white;
+    background-color: floralwhite!important;
     width: 100%;
     padding-bottom: 10px;
     border-radius: 15px;
 }
 
-
-@keyframes grow {
-    0% {
-            top: 0%;
-        }
-
-    30% {
-        top: 50%;
-    }
-
-    100% {
-        top: 0%;
-    }
-}
-
-.div_to_animate {
-    animation-name: grow;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-} 
-
+/* view containing compose email view */
 #compose-view {
     background-color: transparent;
     background-color: white;
@@ -50,6 +34,7 @@ body{
     text-align: center;
     font-size: 20px;
     padding: 20px 20px 0 20px;
+    height: 70%;
 }
 
 #compose-view input {
@@ -69,11 +54,18 @@ body{
 }
 
 
-
+/* container for each EMAIL*/
 .mail_container {
     margin: 2rem;
-    border-radius: 15px;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: #fadbc1 1px solid!important;
 }
+
+
+
 
 .nav-item {
     margin: 10px;
@@ -82,4 +74,70 @@ body{
 
 .nav-link {
     font-size: 30px;
+
 }
+
+/* move back button */
+#move-back{
+    background-color: transparent;
+    padding:0;
+}
+
+#mail-view {
+    font-size: 20px;
+    border-radius: 15px;
+}
+
+/*footer */
+#footer {
+    justify-content: center;
+    display: flex;
+    margin: 10% auto auto auto;
+
+    background-color:transparent ;
+    border-radius: 15px;
+    opacity: 1;
+    color: black;
+    font-size: 20px;
+    width: 60%;
+    transition: all 1s;
+}
+
+
+
+#footer:hover{
+    opacity: 0.7;
+    background-color: floralwhite;
+    transition: all 1s;
+}
+
+#footer div {
+    width: 30%;
+    text-align: center;
+    padding-top: 40px;
+}
+
+#footer div p {
+    font-size: 40px;
+    font: bold;
+}
+
+#footer div p:hover{
+    color: #62a69b;
+}
+
+.footer-links li {
+ text-decoration: none;   
+ list-style: none;
+}
+
+.footer-links a{
+    color:black;
+    text-decoration: none;
+}
+
+.footer-links a:hover{
+    color: #62a69b!important;
+    font-size: 30px;
+}
+

@@ -4,10 +4,15 @@
 <html lang="en">
     <head>
         <title>{% block title %}Mail{% endblock %}</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'mail/favicon.png' %}"/>
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/275fc2985a.js" crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         <link rel="stylesheet" href="{% static 'mail/styles.css' %}">
         {% block script %}
@@ -20,20 +25,39 @@
             {% endblock %}
           </nav>
 
-        <div style="" class="container">
+        <div style="min-height: 100vh!important;" class="container">
             {% block body %}
             {% endblock %}
         </div>
+
+            <!-- footer -->
+    <div id="footer">
+      <div>
+          <ul class="footer-links">
+              <p>Browse</p>
+
+              <li><a onclick="load_mailbox('inbox')" href="#" > Inbox</a> </li>
+              <li><a onclick="load_mailbox('sent')" href="#"> Sent</a> </li>
+              <li><a onclick="compose_email(null)" href="#"> Compose</a> </li>
+              <li><a onclick="load_mailbox('archive')" href="#"> Archived</a> </li>
+
+
+          </ul>
+      </div>
+
+      <div>
+          <ul class="footer-links">
+              <p>Connect</p>
+
+              <li><a href="https://www.github.com/Overlrd"  target="_blank"> <i class="fa-brands fa-github"></i> </a></li>
+              <li><a href="https://www.linkedin.com/in/augustin-kpadonou-590aa5227"  target="_blank"> <i class="fa-brands fa-linkedin"></i> </a></li>
+              <li> <a href="https://discord.com/channels/@S8d00#8869"  target="_blank"> <i class="fa-brands fa-discord"></i> </a> </li>
+              <li> <a href="https://twitter.com/@Overlrd_"  target="_blank"> <i class="fa-brands fa-twitter"></i> </a> </li>
+          </ul>
+      </div>
+
+  </div>
+
     </body>
 </html>
 
-<!-- <li class="nav-item">
-    <a class="nav-link active" href="#">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="#">Link</a>
-  </li>
-  
-  <li class="nav-item">
-    <a class="nav-link active" href="#">Disabled</a>
-  </li> -->

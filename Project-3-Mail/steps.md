@@ -47,3 +47,9 @@ Recall that you can send a PUT request to /emails/<email_id> to mark an email as
 Once an email has been archived or unarchived, load the user’s inbox.
 
 # Reply 
+
+
+
+
+trigger animation on each div reload
+testingiijk

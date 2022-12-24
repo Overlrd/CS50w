@@ -1,6 +1,8 @@
 {% extends "mail/layout.html" %}
 {% load static %}
 
+{% block title %} Mail  {% endblock %}
+
 {% block header%}
 <a class="navbar-brand" href="#"><h2>{{ request.user.email }}</h2></a>
 <div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
@@ -23,10 +25,6 @@
 <div class="collapse navbar-collapse justify-content-center">
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <span id='notification-badge-text' class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;">5</span> <!-- your badge -->
-            <a class="nav-link" href="#"> <img width="40px" src="https://i.imgur.com/Uaqvn2G.png" alt="notif-bell"> </a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link btn btn-light" href="{% url 'logout' %}"> <img width="40px" src="https://i.imgur.com/0jwpYJV.png" alt="notif-bell"></a>
         </li>
     </ul>
@@ -41,15 +39,19 @@
     </div>
 
     <div id="mail-view" class="card">
-        <div id="mail-header" class="card-header">
-            <div style="font-weight:bold;" id='mail-sender'></div>
-            <div style="font-weight:bold;" id='mail-receiver'></div>
+        <div id="mail-header" class="card-header" style="display: flex;">
+            <div style="margin-right:20px;" id="move-back"> <img width="40px" src="https://i.imgur.com/OG7SaBz.png" alt=""> </div>
+            <div>
+                <div style="font-weight:bold;" id='mail-sender'></div>
+                <div style="font-weight:bold;" id='mail-receiver'></div>
+            </div>
+
         </div>
         <div id="card-body-1" class="card-body">
           <h5 style="font-weight:bold;" id="mail-subject" class="card-title"></h5>
           <p id="mail-time" class="card-text"></p>
           <a id="mail-button-reply" href="#" class="btn btn-primary">reply</a>
-          <a id="mail-button-archive" href="#" class="btn btn-secondary">Archive</a>
+          <a id="mail-button-archive" href="#" class="btn btn-warning">Archive</a>
         </div>
         <div id="card-body-2" class="card-body">
             <p style="font-size: 20px;" id="mail-content" class="card-text"></p>
@@ -73,6 +75,7 @@
             <input style="color: white;" id='compose-submit' type="submit" class="btn btn-primary" value="Send Mail"/>
         </form>
     </div>
+
 
 {% endblock %}
 

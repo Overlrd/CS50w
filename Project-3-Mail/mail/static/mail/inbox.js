@@ -125,6 +125,7 @@ function load_mailbox(mailbox) {
   // API request for the mailbox content
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
+  
   .then(emails => {
 
       // ... do something else with emails ...
@@ -146,14 +147,14 @@ function load_mailbox(mailbox) {
         })
 
 
-        if (mailbox == 'inbox'){
-          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} From : ${mail_sender}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
+        if (mailbox == 'inbox' || mailbox == 'archive'){
+          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>From : ${mail_sender}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = true ;
           swap_text = "Mail Archived";
 
 
         } else {
-          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>Id : ${mail_id} To : ${mail_recipients}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
+          mail_container.innerHTML = `<div style='margin:10px; font-weight:bold;'>To : ${mail_recipients}</div> <div style='margin:10px;'>Subject : ${mail_subject}</div> <div class='.navbar-text' style='margin:10px;'>${mail_date}</div>`;
           to_archive = false ;
           swap_text = "Mail Unarchived";
 
@@ -268,11 +269,6 @@ function load_email(email_id, mailbox){
 
         } )
       )
-
-
-
-
-
       
     })
 

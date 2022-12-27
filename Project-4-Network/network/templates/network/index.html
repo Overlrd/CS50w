@@ -1,0 +1,25 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+
+{% block body %}
+    <div class="container">
+
+          <div id="compose-view">
+            <h3>New Post</h3>
+            <form id="compose-form">
+                <textarea style="font-size: 20px;" class="form-control" id="compose-body" placeholder="content"></textarea>
+                <input id='compose-submit' type="submit" class="btn btn-primary" value="Add Post"/>
+            </form>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+
+{% block script %}
+<script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

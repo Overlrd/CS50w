@@ -1,0 +1,84 @@
+{% extends "mail/layout.html" %}
+{% load static %}
+
+{% block title %} Mail  {% endblock %}
+
+{% block header%}
+<a class="navbar-brand" href="#"><h2>{{ request.user.email }}</h2></a>
+<div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
+    <ul class="navbar-nav nav-pills">
+
+        <li class="nav-item" >
+            <a class="nav-link btn btn-light" id="inbox">Inbox</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="compose">Compose</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="sent">Sent</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" id="archived">Archived</a>
+        </li>
+    </ul>
+</div>
+<div class="collapse navbar-collapse justify-content-center">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link btn btn-light" href="{% url 'logout' %}"> <img width="40px" src="https://i.imgur.com/0jwpYJV.png" alt="notif-bell"></a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+
+    <hr>
+
+    <div id="emails-view">
+    </div>
+
+    <div id="mail-view" class="card">
+        <div id="mail-header" class="card-header" style="display: flex;">
+            <div style="margin-right:20px;" id="move-back"> <img width="40px" src="https://i.imgur.com/OG7SaBz.png" alt=""> </div>
+            <div>
+                <div style="font-weight:bold;" id='mail-sender'></div>
+                <div style="font-weight:bold;" id='mail-receiver'></div>
+            </div>
+
+        </div>
+        <div id="card-body-1" class="card-body">
+          <h5 style="font-weight:bold;" id="mail-subject" class="card-title"></h5>
+          <p id="mail-time" class="card-text"></p>
+          <a id="mail-button-reply" href="#" class="btn btn-primary">reply</a>
+          <a id="mail-button-archive" href="#" class="btn btn-warning">Archive</a>
+        </div>
+        <div id="card-body-2" class="card-body">
+            <p style="font-size: 20px;" id="mail-content" class="card-text"></p>
+        </div>
+
+      </div>
+
+    <div id="compose-view">
+        <h3>New Email</h3>
+        <form id="compose-form">
+            <div class="form-group">
+                From: <input disabled class="form-control" value="{{ request.user.email }}">
+            </div>
+            <div class="form-group">
+                To: <input id="compose-recipients" class="form-control">
+            </div>
+            <div class="form-group">
+                <input style="font: bold; font-size: 30px;" class="form-control" id="compose-subject" placeholder="Subject">
+            </div>
+            <textarea style="font-size: 20px;" class="form-control" id="compose-body" placeholder="Body"></textarea>
+            <input style="color: white;" id='compose-submit' type="submit" class="btn btn-primary" value="Send Mail"/>
+        </form>
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'mail/inbox.js' %}"></script>
+{% endblock %}

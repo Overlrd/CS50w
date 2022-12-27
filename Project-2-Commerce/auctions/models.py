@@ -95,13 +95,3 @@ class Watclist(models.Model):
         return f'{self.user}"s watchlist containing {self.items}' 
 
 
-###### Create notififcation model
-#https://stackoverflow.com/questions/72264677/how-can-i-implement-notifications-system-in-django
-class Notification(models.Model):
-    is_read = models.BooleanField(default=False)
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_notification')
-
-    def __str__(self):
-        return f'{self.user} s notifications' 

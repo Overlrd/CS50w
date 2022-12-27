@@ -31,8 +31,8 @@
                   </div>
                   <div class="form-group col-md-4">
                         <label for="inputCategory">Category</label>
-                        <select id="inputCategory" class="form-control" name='category' required>
-                            <option value ='' >Select a category</option>
+                        <select id="inputCategory" class="form-control" name='category'>
+                            <option value ='other' >Select a category</option>
                             {% for category in categories %}
                                     <option value = '{{category.pk}}' >{{category.title}}</option>
                             {% endfor %}

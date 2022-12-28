@@ -9,5 +9,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     #add post url
-    path("new_post", views.new_post, name="new_post")
+    path("posts", views.new_post, name="new_post"),
+    #get posts
+    path("posts/<str:which>", views.posts, name="posts")
 ]

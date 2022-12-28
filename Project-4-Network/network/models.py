@@ -15,6 +15,15 @@ class Post(models.Model):
     content = models.CharField(max_length=280)
     date = models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "body": self.content,
+            "timestamp": self.date.strftime("%b %d %Y, %I:%M %p"),
+            "likes" :  len(self.related_likes.all())
+        }
+
     def __str__(self):
         return f'post {self.pk} by {self.user.username} on {self.date}'
 

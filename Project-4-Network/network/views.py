@@ -86,3 +86,11 @@ def new_post(request):
 
     return JsonResponse({"message": "Post added successfully"}, status=201)
 
+
+# view all posts
+def posts(request, which):
+    if which == 'all':
+        posts_to_return = Post.objects.all()
+        posts_to_return = posts_to_return.order_by("-date")
+        json_object = [post.serialize() for post in posts_to_return]
+        return JsonResponse(json_object, safe=False)

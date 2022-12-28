@@ -9,48 +9,82 @@
         {% block script %}
         {% endblock script %}
     </head>
-    <body>
+    <body> 
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
-          
-            <div>
-              <ul class="navbar-nav mr-auto">
+        <nav class="custom_navbar">
+            <ul class="custom_navbar-nav">
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
-                    </li>
-                    
+                <li class="nav-item" >
+                    <a class="custom_nav-link" href="#">   
+                        <span class="link-text" style="text-align: center;">
+                            <h1>{{ user.username }}</h1>
+                        </span>
+                    </a>
+                </li>
                 {% endif %}
                 <li class="nav-item">
-                  <a id="all-posts" class="nav-link" href="#">All Posts</a>
+                    <a class="custom_nav-link" href="#" id="all-posts">
+                        <span class="link-text">
+                            All Posts
+                        </span>
+                    </a>
                 </li>
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a id="add-post" class="nav-link" href="#">Add Post</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Following</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                    </li>
+
+                <li class="nav-item">
+                    <a href="#" class="custom_nav-link" id="add-post">
+                        <span class="link-text">
+                            Add Post
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="custom_nav-link">
+                        <span class="link-text">
+                            Following
+                        </span>
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="custom_nav-link">
+                        <span class="link-text">
+                            Logout
+                        </span>
+                    </a>
+
+                </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
+            
+                <li class="custom_nav-item">
+                    <a href="{% url 'login' %}" class="custom_nav-link">
+                        <span class="link-text">
+                            Login
+                        </span>
+                    </a>
+
+                </li>
+
+                <li class="custom_nav-item">
+                    <a href="{% url 'register' %}" class="custom_nav-link">
+                        <span class="link-text">
+                            Register
+                        </span>
+                    </a>
+
+                </li>
                 {% endif %}
-              </ul>
-            </div>
-          </nav>
-        
-        <div class="body">
-            {% block body %}
-            {% endblock %}
-        </div>
+            </ul>
+        </nav>
+
+                <div >
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea omnis, labore animi, aliquid corrupti, aliquam sint ipsa dolorum ipsam fuga rem aut magnam quidem ab reiciendis. Reiciendis alias fugit esse.
+
+                </div>
+             <div style="margin-top: 5%;" class="container">
+                {% block body %}
+                {% endblock %}
+            </div> 
     </body>
 </html>

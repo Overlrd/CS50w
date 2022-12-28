@@ -15,7 +15,7 @@ function load_post(which){
 
         document.querySelector('#all-posts-view').style.display = 'block';
         document.querySelector('#compose-view').style.display = 'none';
-        document.querySelector('#all-posts-view').innerHTML = `<h3>${which.charAt(0).toUpperCase() + which.slice(1)} Posts</h3>`;
+        //document.querySelector('#all-posts-view').innerHTML = `<h3>${which.charAt(0).toUpperCase() + which.slice(1)} Posts</h3>`;
 
         //fetch for the posts
         fetch(`/posts/${which}`)

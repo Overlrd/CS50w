@@ -6,6 +6,7 @@ The screenshot at the top of this specification shows the “New Post” box at 
 
 
 # All Posts :
+# add gitignore to files
 The “All Posts” link in the navigation bar should take the user to a page where they can see all posts from all users, with the most recent posts first.
 
 

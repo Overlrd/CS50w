@@ -1,6 +1,5 @@
 .vscode
 runtime.txt
 steps.md
-__pycache__
-.git
-.CS50-env
+**/__pycache__
+.CS50-env/

@@ -1,4 +1,4 @@
-.post_container {
+/* .post_container {
     margin: 2rem;
     border-radius: 0;
     display: flex;
@@ -6,7 +6,7 @@
     justify-content: space-between;
     border: #fadbc1 1px solid!important;
 }
-
+ */
 
 
 
@@ -25,10 +25,11 @@
 
 
 body {
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: black;
     margin: 0;
     padding: 0;
+    display: flex;
 }
 
 
@@ -52,7 +53,6 @@ body::-webkit-scrollbar-thumb {
     height: 100vh;
     position: fixed;
     background-color: var(--bg-secondary);
-    transition:  width 200ms ease;
 }
 
 .custom_navbar-nav {
@@ -82,8 +82,6 @@ body::-webkit-scrollbar-thumb {
 
 .tweet_footer {
     display: flex;
-    justify-content: space-between;
-    margin: auto;
     width: 20rem;
 }
 
@@ -92,6 +90,12 @@ body::-webkit-scrollbar-thumb {
     border: 1px solid black;
     border-radius: 10px;
     padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--bg-secondary);
+}
+
+.tweet_container:hover {
+    background-color: var(--bg-primary);
 }
 
 .image_container img {
@@ -117,13 +121,88 @@ width: 50px;
 .tweet_body_text {
     justify-content: center;
     margin-left: 2rem;
+    font-family: 'Exo', sans-serif;
+    font-family: 'Libre Franklin', sans-serif;    
 }
 
 .tweet_footer .tweet_footer_item {
     display: flex;
 }
 
-.tweet_footer_item  span{
+.tweet_footer_item  span i{
     margin-right: 1rem;
     
 }
+
+.tweet_body_container {
+    width: 100%;
+}
+
+.liked {
+    color: red;
+}
+
+
+.new_tweet_container {
+    background-color: red;
+    width: 50%;
+    height: 30vh;
+    margin: auto;
+    
+}
+
+.card {
+    background-color: #ffffff;
+    margin: auto;
+    color: var(--bg-primary);
+    border-radius: 20px;
+    position: fixed;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+
+
+.card-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+
+}
+
+.card-image img{
+    width: 50px;
+    border-radius: 50%;
+}
+
+.card-body {
+    display: flex;
+}
+
+.tweet_input textarea{
+    all: unset;
+    width: 100%;
+    border: none;   
+}
+.btn  {
+    border-radius: 15px;
+}
+
+.card-content .btn {
+}
+
+.card-header img {
+    cursor: pointer;
+    width: 2rem;
+}
+
+
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0,0,0,0.5);
+  }

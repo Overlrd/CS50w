@@ -4,12 +4,40 @@ document.addEventListener('DOMContentLoaded', function (){
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all'))
 document.querySelector('#add-post').addEventListener('click', () => compose())
 
+// overlay functions
+
+
+
+function overlay_on() {
+    document.getElementById("overlay").style.display = "block";
+  }
+  
+function overlay_off() {
+document.getElementById("overlay").style.display = "none";
+}
+
+document.querySelector('#close_span').addEventListener('click', function (){
+    overlay_off()
+})
+
+function popify(view){
+    overlay_on()
+    element = document.querySelector(`${view}`).animate([
+      // keyframes
+      {opacity: '0'},
+      {opacity : '1'}
+    ],
+    // timing options
+    {
+      duration:1000,
+  
+    })}
+
 // by default load new post
-compose()
+load_post('all')
 
 function load_post(which){
         history.pushState({'posts':which}, '', ``);
-
 
         // hide other view
 
@@ -28,6 +56,11 @@ function load_post(which){
                 post_content = post['body']
                 post_timestamp = post['timestamp']
                 post_num_like = post['likes']
+                if( parseInt(post_num_like) > 0 ){
+                    liked = "liked";}
+                else {
+                    liked=''
+                }
     
     
                 post_container = document.createElement('div');
@@ -53,32 +86,14 @@ function load_post(which){
                     <div class="tweet_footer">
                         <div class="tweet_footer_item">
                             <span>
-                                <i class="fa-regular fa-heart"></i>
+                                <i class="fa-solid fa-heart ${liked}"></i>
                             </span>
                             <p>${post_num_like}</p>
                         </div>
 
-                        <div class="tweet_footer_item">
-                            <span>
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                            <p>15</p>
-                        </div>
-
-                        <div class="tweet_footer_item">
-                            <span>
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                            <p>15</p>
-                        </div>
-
-
                     </div>
                 </div>
-
                 `
-
-
                 document.querySelector('#all-posts-view').appendChild(post_container)    
             }
         });
@@ -87,12 +102,23 @@ function load_post(which){
 
 
 function compose(){
-    document.querySelector('#all-posts-view').style.display = 'none';
+    //document.querySelector('#all-posts-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'block';
+    popify('#compose-view')
 }
 
+// avoid user sending empty posts
+document.querySelector('#compose-body').addEventListener('keyup', function (){
+    if(this.value.length > 1){
+        document.querySelector('#compose-submit').disabled = false;
+    }else{
+        document.querySelector('#compose-submit').disabled = true;
 
-// function write post
+    }
+})
+
+
+// send post to server
 document.querySelector('#compose-form').onsubmit = () => {
     const body = document.querySelector('#compose-body').value;
     // pass a post request to the backend
@@ -104,9 +130,11 @@ document.querySelector('#compose-form').onsubmit = () => {
     })
     .then(response => response.json())
     .then(function () {
-        alert('sent done')
+        document.location.href="/"
     });
     }
     
+
+
 
 })

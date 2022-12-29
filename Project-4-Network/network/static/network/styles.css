@@ -80,6 +80,50 @@ body::-webkit-scrollbar-thumb {
 
 }
 
-.nav-item{
+.tweet_footer {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    width: 20rem;
+}
 
+.tweet_container {
+    display: flex;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.image_container img {
+border-radius: 50%;
+width: 50px;
+}
+
+
+.tweet_header_container {
+    display: flex;
+    margin: 10px;
+}
+.tweet_container .tweet_username {
+    margin-right: 10px;
+    font-weight: bold;
+}
+.tweet_container .tweet_user_at , .tweet_date {
+    font: small;
+    color: gray;
+    margin-right: 10px;
+}
+
+.tweet_body_text {
+    justify-content: center;
+    margin-left: 2rem;
+}
+
+.tweet_footer .tweet_footer_item {
+    display: flex;
+}
+
+.tweet_footer_item  span{
+    margin-right: 1rem;
+    
 }

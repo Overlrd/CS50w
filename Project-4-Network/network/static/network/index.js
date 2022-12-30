@@ -1,11 +1,13 @@
 // wait for the DOm content to load
 document.addEventListener('DOMContentLoaded', function (){
+
+// by default load new post
+load_post('all')
+
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all'))
 document.querySelector('#add-post').addEventListener('click', () => compose())
 
-// overlay functions
-// trash 
 
 
 function overlay_on() {
@@ -33,12 +35,11 @@ function popify(view){
   
     })}
 
-// by default load new post
-load_post('all')
+
 
 function load_post(which){
-        history.pushState({'posts':which}, '', ``);
 
+        //alert('all post clicked')
         // hide other view
 
         document.querySelector('#all-posts-view').style.display = 'block';
@@ -94,8 +95,11 @@ function load_post(which){
                     </div>
                 </div>
                 `
-                document.querySelector('#all-posts-view').appendChild(post_container)    
+                document.querySelector('#all-posts-view').appendChild(post_container)   
+
             }
+
+            return false
         });
     
 }

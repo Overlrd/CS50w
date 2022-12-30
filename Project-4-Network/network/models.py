@@ -3,7 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    first_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
 
 
 

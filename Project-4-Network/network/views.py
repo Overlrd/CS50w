@@ -44,6 +44,9 @@ def register(request):
         username = request.POST["username"]
         email = request.POST["email"]
 
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -54,7 +57,7 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User.objects.create_user(username ,email, password, first_name = first_name, last_name=last_name)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -94,3 +97,8 @@ def posts(request, which):
         posts_to_return = posts_to_return.order_by("-date")
         json_object = [post.serialize() for post in posts_to_return]
         return JsonResponse(json_object, safe=False)
+
+def profile(request, username):
+    return render(request, "network/profile.html",{
+        'username':username
+    })

@@ -206,3 +206,102 @@ width: 50px;
     height: 100%;
     background-color:rgba(0,0,0,0.5);
   }
+
+.tweet_username {
+    color: white;
+    font: bold;
+}
+
+.tweet_username :hover {
+    cursor: pointer;
+    color: #b6b6b6;
+}
+
+/*profile page*/
+
+.profile-container {
+    width: 60%;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    padding: 5px;
+    background-image: url('/static/network/banner.jpg') ;
+    background-repeat: space;
+    background-color:#141418;
+}
+
+.profile-header {
+    display: flex;
+}
+
+.profile-image {
+    margin: 5%;
+    max-width: 10rem;
+    max-height: 10rem;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: white 10px solid;
+
+}
+.profile-image img {
+    max-width: 20rem;
+    max-height: 20rem;
+}
+
+.profile-infos {
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: 1rem;
+    margin-right: 3rem;
+
+}
+
+.user_container{
+    border: 1px white solid;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    width: 60%;
+
+
+
+}
+
+.subscriber_view {
+    display: flex;
+}
+
+.subscriber_view p {
+    margin-right: 5px;
+}
+
+.toggle_view {
+    width: 60%;
+
+}
+
+.profile_base_container {
+    display: flex;
+}
+
+.fixed_tweet_container {
+    width: 100%;
+}
+
+.fixed_posts {
+   width: 30%;
+   margin-right: 2rem;
+   position: fixed;
+   right: 0;
+   background-color:#3e3e5c;
+   height: 80vh;
+   border-radius: 10px;
+   padding: 1rem;
+
+}
+
+.container {
+    justify-content: center!important;
+}

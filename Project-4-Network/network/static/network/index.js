@@ -9,7 +9,7 @@ document.querySelector('#all-posts').addEventListener('click', () => load_post('
 document.querySelector('#add-post').addEventListener('click', () => compose())
 
 
-
+// overlay fonctions
 function overlay_on() {
     document.getElementById("overlay").style.display = "block";
   }
@@ -35,7 +35,7 @@ function popify(view){
   
     })}
 
-
+// load posts from server
 
 function load_post(which){
 
@@ -76,7 +76,7 @@ function load_post(which){
 
                 <div class="tweet_body_container" >
                     <div class="tweet_header_container">
-                        <span class="tweet_username" >${post_user}</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
+                        <span class="tweet_username"> <a href="${post_user}/profile"> <p> ${post_user} </p> </a> </span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
 
                     </div>
                     <div class="tweet_body_text">
@@ -97,13 +97,19 @@ function load_post(which){
                 `
                 document.querySelector('#all-posts-view').appendChild(post_container)   
 
+
+                
+
             }
+
 
             return false
         });
-    
+
+
 }
 
+// show compose form for new post
 
 function compose(){
     //document.querySelector('#all-posts-view').style.display = 'none';

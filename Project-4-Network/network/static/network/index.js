@@ -5,7 +5,7 @@ document.querySelector('#all-posts').addEventListener('click', () => load_post('
 document.querySelector('#add-post').addEventListener('click', () => compose())
 
 // overlay functions
-
+// trash 
 
 
 function overlay_on() {
@@ -109,7 +109,7 @@ function compose(){
 
 // avoid user sending empty posts
 document.querySelector('#compose-body').addEventListener('keyup', function (){
-    if(this.value.length > 1){
+    if(this.value.length > 0){
         document.querySelector('#compose-submit').disabled = false;
     }else{
         document.querySelector('#compose-submit').disabled = true;

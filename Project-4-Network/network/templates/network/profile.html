@@ -4,12 +4,18 @@
 
 {% block body %}
 
+<input type="hidden" id="request_user" value="{{ request.user.id }}">
+<input type="hidden" id="u_name" value="{{username}}">
+
 <div class="profile_base_container">
     <div class="container">
 
         <div class="profile-container ">
             <div class="profile-title">
-                <h2>{{ username }}'s Profile <i class="fa-thin fa-paper-plane"></i></h2>
+                <span class="profile_back_span">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </span>
+               <p>{{username}}</p>
             </div>
             <div class="profile-header">
                 <div class="profile-image">
@@ -17,80 +23,28 @@
                 </div>
 
                 <div class="profile-infos">
-                <button class="btn btn-primary">Follow</button>
+                {% if user.is_authenticated %}
+                    <button id="follow_btn" class="btn btn-primary">Follow</button>
+                {% endif %}
                 </div>
 
             </div>
         </div>
         <div class="user_container">
             <h4>{{ username }}</h4>
-            <p>www;kkkk@gmail.com</p>
-            <p>Joined on 29 dec </p>
+            <h4 id="user_profile_name"></h4>
+            <p id="user_profile_mail">www;kkkk@gmail.com</p>
+            <p id="user_profile_joined_date">Joined on 29 dec </p>
 
             <div class="subscriber_view">
-                <p>78 Subscriptions </p>
-                <p>678 Subsscribers</p>
+                <p id="user_profile_subscriptions">78 Subscriptions </p>
+                <p id="user_profile_subscribers">678 Subsscribers</p>
 
             </div>
+            <p id="user_profile_num_posts">45 Posts </p>
         </div>
-        <div class="toggle_view">
-            <div class="tweet_container" style="">
-                <div class="image_container">
-                        <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
-                </div>
-            
-            
-                <div class="tweet_body_container" >
-                    <div class="tweet_header_container">
-                        <span class="tweet_username" >SUdo</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">23 Dec</span>
-            
-                    </div>
-                    <div class="tweet_body_text">
-                        <p id="tweet_body_text">
-                            Hi i like posting
-                        </p>
-                    </div>
-                    <div class="tweet_footer">
-                        <div class="tweet_footer_item">
-                            <span>
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                            <p>15</p>
-                        </div>
-            
-                    </div>
-                </div>
-            
-            </div>
+        <div id="toggle_view_container" class="toggle_view">
 
-            <div class="tweet_container" style="">
-                <div class="image_container">
-                        <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
-                </div>
-            
-            
-                <div class="tweet_body_container" >
-                    <div class="tweet_header_container">
-                        <span class="tweet_username" >SUdo</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">23 Dec</span>
-            
-                    </div>
-                    <div class="tweet_body_text">
-                        <p id="tweet_body_text">
-                            Hi i like posting
-                        </p>
-                    </div>
-                    <div class="tweet_footer">
-                        <div class="tweet_footer_item">
-                            <span>
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                            <p>15</p>
-                        </div>
-            
-                    </div>
-                </div>
-            
-            </div>
 
             <div class="tweet_container" style="">
                 <div class="image_container">
@@ -125,6 +79,8 @@
         </div>
 
     </div>
+
+<!--     Latest tweets -->
 
     <div class="fixed_posts" >
         <h1>Latest Posts</h1>
@@ -160,6 +116,69 @@
 
         </div>
 
+        <div class="fixed_tweet_container">
+            <div class="tweet_container" style="">
+                <div class="image_container">
+                        <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
+                </div>
+            
+            
+                <div class="tweet_body_container" >
+                    <div class="tweet_header_container">
+                        <span class="tweet_username" >SUdo</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">23 Dec</span>
+            
+                    </div>
+                    <div class="tweet_body_text">
+                        <p id="tweet_body_text">
+                            here
+                        </p>
+                    </div>
+                    <div class="tweet_footer">
+                        <div class="tweet_footer_item">
+                            <span>
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
+                            <p>15</p>
+                        </div>
+            
+                    </div>
+                </div>
+            
+            </div>
+
+        </div>
+
+        <div class="fixed_tweet_container">
+            <div class="tweet_container" style="">
+                <div class="image_container">
+                        <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
+                </div>
+            
+            
+                <div class="tweet_body_container" >
+                    <div class="tweet_header_container">
+                        <span class="tweet_username" >SUdo</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">23 Dec</span>
+            
+                    </div>
+                    <div class="tweet_body_text">
+                        <p id="tweet_body_text">
+                            here
+                        </p>
+                    </div>
+                    <div class="tweet_footer">
+                        <div class="tweet_footer_item">
+                            <span>
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
+                            <p>15</p>
+                        </div>
+            
+                    </div>
+                </div>
+            
+            </div>
+
+        </div>
 
     </div>
 
@@ -168,6 +187,10 @@
 
 {% endblock body %}
 
+<script id="hello-data" type="application/json">{"current_user": "{{ username }}"}</script>
 
 
+{% block script %}
+<script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
 

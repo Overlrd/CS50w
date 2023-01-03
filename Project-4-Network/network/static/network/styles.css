@@ -139,7 +139,7 @@ width: 50px;
 }
 
 .liked {
-    color: red;
+    color: #6649b8;
 }
 
 
@@ -228,6 +228,31 @@ width: 50px;
     background-repeat: space;
     background-color:#141418;
 }
+
+.profile-title {
+    display: flex;
+
+}
+
+.profile_back_span {
+    margin-right: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.profile_back_span i {
+    width: 2rem;
+    color: white;
+    font-size: 2rem;
+
+
+}
+
+.profile-title p{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
 
 .profile-header {
     display: flex;

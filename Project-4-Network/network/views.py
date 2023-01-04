@@ -74,14 +74,17 @@ def profile_page(request,username):
     #return username, mail, first and last name , joined date , subscribers and subscriptions, num posts
     #and all user posts 
     user = User.objects.get(username = username)
-    request_user = User.objects.get(username = request.user)
-    #check if the request user is following the profiled user
-    if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) :
-        json_response['following'] = True
-    else:
-        json_response['following'] = False
 
-    print(json_response["following"])
+    if str(request.user) != "AnonymousUser":
+        request_user = User.objects.get(username = request.user)
+        #check if the request user is following the profiled user
+        if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) :
+            json_response['following'] = True
+        else:
+            json_response['following'] = False
+    else:
+        request_user = None
+
     all_posts = user.related_posts.all()
     all_posts = all_posts.order_by("-date")
     json_response['id'] = user.pk
@@ -123,32 +126,26 @@ def posts(request, which):
         posts_to_return = Post.objects.all()
         posts_to_return = posts_to_return.order_by("-date")
         json_response = [post.serialize() for post in posts_to_return]
+        print('all posts requested')
+        return JsonResponse(json_response, safe=False)
+
+    if which == "following":
+        json_response = {}
+        posts_list = []
+        user = request.user
+        #get all followed user's
+        followed_users = user.related_follows.get().followed_users.all()
+        for i in followed_users:
+            all_posts = i.related_posts.all()
+            for i in all_posts:
+                posts_list.append(i)
+
+        json_response = [post.serialize() for post in posts_list]
+        print(posts_list)
+
         return JsonResponse(json_response, safe=False)
 
 
-def profile(request, username):
-    json_response = {}
-    #return username, mail, first and last name , joined date , subscribers and subscriptions, num posts
-    #and all user posts 
-    user = User.objects.get(username = username)
-    request_user = User.objects.get(username = request.user)
-    #check if the request user is following the profiled user
-    if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) :
-        json_response['following'] = True
-    else:
-        json_response['following'] = False
-
-
-    all_posts = user.related_posts.all()
-    all_posts = all_posts.order_by("-date")
-    json_response['id'] = user.pk
-    json_response['first_name']  = user.first_name
-    json_response['last_name'] = user.last_name
-    json_response['date_joined'] = user.date_joined
-    json_response['user_email'] = user.email
-    json_response['num_posts'] = len(all_posts)
-    json_response['post_objects'] = [post.serialize() for post in all_posts ]
-    return JsonResponse(json_response, safe=False)
 
 @csrf_exempt
 @login_required
@@ -169,6 +166,6 @@ def follow_or_not(request):
             print("unfollowing")
             follow_list , created = Follow.objects.get_or_create(user = request.user)
             follow_list.followed_users.remove(followed_user)
-            return JsonResponse({"message": "unfollowed successfully"}, status=201)
+            return JsonResponse({"message": " successfully"}, status=201)
 
     

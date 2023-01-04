@@ -2,11 +2,14 @@
 document.addEventListener('DOMContentLoaded', function (){
 
 // by default load new post
+document.querySelector('#all-posts-view').style.display = 'block';
+
 load_post('all')
 
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all'))
 document.querySelector('#add-post').addEventListener('click', () => compose())
+document.querySelector('#Following').addEventListener('click', () => load_post('following') )
 
 
 // overlay fonctions
@@ -39,18 +42,19 @@ function popify(view){
 
 function load_post(which){
 
-        //alert('all post clicked')
         // hide other view
 
         document.querySelector('#all-posts-view').style.display = 'block';
         document.querySelector('#compose-view').style.display = 'none';
         //document.querySelector('#all-posts-view').innerHTML = `<h3>${which.charAt(0).toUpperCase() + which.slice(1)} Posts</h3>`;
-
+        main_container = document.querySelector('#all-posts-view')
+        main_container.innerHTML = ''
         //fetch for the posts
         fetch(`/posts/${which}`)
         .then(response => response.json())
         .then(posts => {
             console.log(posts)
+
             for (const post of posts){
                 post_id = post['id']
                 post_user = post['user']
@@ -95,7 +99,8 @@ function load_post(which){
                     </div>
                 </div>
                 `
-                document.querySelector('#all-posts-view').appendChild(post_container)   
+
+                main_container.append(post_container)   
 
 
                 

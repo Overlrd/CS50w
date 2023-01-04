@@ -6,6 +6,8 @@
 
 <input type="hidden" id="profiled_user" value="{{response.id}}">
 <input type="hidden" id="profiled_user_name" value="{{response.username}}">
+<input type="hidden" id="request_user" value="{{request.user.id}}">
+
 
 
 <div class="profile_base_container">
@@ -13,8 +15,8 @@
 
         <div class="profile-container ">
             <div class="profile-title">
-                <span class="profile_back_span">
-                    <i class="fa-solid fa-arrow-left"></i>
+                <span class="profile_back_span" >
+                    <i class="fa-solid fa-arrow-left" id="profile_back_arrow" style="cursor: pointer;"></i>
                 </span>
                <p>{{response.first_name}}</p>
             </div>

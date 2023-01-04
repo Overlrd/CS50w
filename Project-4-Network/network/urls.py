@@ -14,6 +14,5 @@ urlpatterns = [
     path("posts/<str:which>", views.posts, name="posts"),
     #get user profile infos
     path("<str:username>/profile", views.profile_page, name='profile'),
-    path("<str:username>/infos", views.profile, name='infos'),
     path("follow", views.follow_or_not, name="follows")
     ]

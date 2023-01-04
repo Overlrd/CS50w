@@ -140,12 +140,14 @@ def follow_or_not(request):
             print('following ')
             follow_list , created = Follow.objects.get_or_create(user = request_user )
             follow_list.followed_users.add(followed_user)
-            return HttpResponseRedirect(request.path)
+            return JsonResponse({"message": "update added successfully"}, status=201)
+
 
     
         elif data.get("action") == "unfollow":
             print("unfollowing")
             follow_list , created = Follow.objects.get_or_create(user = request_user)
             follow_list.followed_users.remove(followed_user)
-            return HttpResponseRedirect(request.path)
+            return JsonResponse({"message": "update added successfully"}, status=201)
 
+    

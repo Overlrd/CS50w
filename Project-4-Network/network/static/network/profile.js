@@ -3,8 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
 let user_profiling = document.querySelector('#u_name').value;
 let request_user = document.getElementById('request_user').value;
 
+
+console.log(`current user ${request_user} following ${user_profiling}`)
 //fetch for profile infos from server
 get_infos( String(user_profiling))
+
+// follow and unfollow 
+document.querySelector('#follow_btn').addEventListener('click', function (){
+    fetch('/follow', {
+        method: 'PUT',
+        body: JSON.stringify({
+            followed_user: user_id,
+            action : `${this.innerHTML}`,
+            user : request_user
+        })
+    })
+    .then(response => {
+        console.log(`${this.value} done`)
+    })
+
+})
 
 function get_infos(user){
     console.log('start fetching from server')
@@ -30,11 +48,9 @@ function get_infos(user){
         }
 
         if (is_followed_by_current_user){
-            follow_button.innerHTML = "Unfollow"
-            change = "follow"
+            follow_button.innerHTML = "unfollow"
         }else {
             follow_button.innerHTML = "follow"
-            change = "unfollow"
         }
 
 
@@ -91,22 +107,6 @@ function get_infos(user){
             document.querySelector('#toggle_view_container').appendChild(post_container)
 
         }
-        // follow and unfollow 
-        follow_button.addEventListener('click', function (){
-
-            fetch('/follow', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    followed_user: user_id,
-                    action : "unfollow",
-                    user : request_user
-                })
-            })
-            .then(response => {
-                console.log('following done')
-            })
-
-        })
     });
 }
 

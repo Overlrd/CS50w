@@ -139,7 +139,7 @@ width: 50px;
 }
 
 .liked {
-    color: #6649b8;
+    color: #ff1677;
 }
 
 
@@ -220,7 +220,7 @@ width: 50px;
 /*profile page*/
 
 .profile-container {
-    width: 60%;
+    width: 100%;
     margin-bottom: 20px;
     border-radius: 15px;
     padding: 5px;
@@ -288,7 +288,7 @@ width: 50px;
     padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1rem;
-    width: 60%;
+    width: 100%;
 
 
 
@@ -303,7 +303,7 @@ width: 50px;
 }
 
 .toggle_view {
-    width: 60%;
+    width: 100%;
 
 }
 
@@ -311,21 +311,7 @@ width: 50px;
     display: flex;
 }
 
-.fixed_tweet_container {
-    width: 100%;
-}
 
-.fixed_posts {
-   width: 30%;
-   margin-right: 2rem;
-   position: fixed;
-   right: 0;
-   background-color:#3e3e5c;
-   height: 80vh;
-   border-radius: 10px;
-   padding: 1rem;
-
-}
 
 .container {
     justify-content: center!important;

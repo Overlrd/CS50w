@@ -70,8 +70,30 @@ def register(request):
 
 
 def profile_page(request,username):
+    json_response = {}
+    #return username, mail, first and last name , joined date , subscribers and subscriptions, num posts
+    #and all user posts 
+    user = User.objects.get(username = username)
+    request_user = User.objects.get(username = request.user)
+    #check if the request user is following the profiled user
+    if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) :
+        json_response['following'] = True
+    else:
+        json_response['following'] = False
+
+    print(json_response["following"])
+    all_posts = user.related_posts.all()
+    all_posts = all_posts.order_by("-date")
+    json_response['id'] = user.pk
+    json_response["username"] = user.username
+    json_response['first_name']  = user.first_name
+    json_response['last_name'] = user.last_name
+    json_response['date_joined'] = user.date_joined
+    json_response['user_email'] = user.email
+    json_response['num_posts'] = len(all_posts)
+    json_response['post_objects'] = [post.serialize() for post in all_posts ]
     return render(request, "network/profile.html",{
-        'username':username
+        'response':json_response
     })
 
 # add a new post
@@ -134,20 +156,19 @@ def follow_or_not(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         followed_user = data.get("followed_user")
-        request_user = data.get("user")
+        followed_user_name = data.get('followed_user_name')
 
         if data.get("action") == "follow":
             print('following ')
-            follow_list , created = Follow.objects.get_or_create(user = request_user )
+            follow_list , created = Follow.objects.get_or_create(user = request.user )
             follow_list.followed_users.add(followed_user)
-            return JsonResponse({"message": "update added successfully"}, status=201)
-
+            return JsonResponse({"message": "followed suceesfully"}, status=201)
 
     
         elif data.get("action") == "unfollow":
             print("unfollowing")
-            follow_list , created = Follow.objects.get_or_create(user = request_user)
+            follow_list , created = Follow.objects.get_or_create(user = request.user)
             follow_list.followed_users.remove(followed_user)
-            return JsonResponse({"message": "update added successfully"}, status=201)
+            return JsonResponse({"message": "unfollowed successfully"}, status=201)
 
     

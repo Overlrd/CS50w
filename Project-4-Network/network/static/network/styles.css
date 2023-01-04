@@ -317,3 +317,17 @@ width: 50px;
     justify-content: center!important;
 }
 
+
+
+.page-link{
+    background-color: #18232c;
+    border: none;
+}
+
+.page-item :hover {
+    background-color:var(--bg-primary);
+}
+
+.pagination_nav {
+    margin-top: 5%;
+}

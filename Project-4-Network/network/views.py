@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator
+
 
 from .models import User, Post, Like, Follow
 
@@ -121,13 +123,16 @@ def new_post(request):
 
 
 # view all postsr
-def posts(request, which):
+def posts(request, which, page):
     if which == 'all':
         posts_to_return = Post.objects.all()
         posts_to_return = posts_to_return.order_by("-date")
         json_response = [post.serialize() for post in posts_to_return]
         print('all posts requested')
-        return JsonResponse(json_response, safe=False)
+        #use paginator
+        p = Paginator(json_response, 10)
+        page1 = p.page(page)
+        return JsonResponse(page1.object_list, safe=False)
 
     if which == "following":
         json_response = {}

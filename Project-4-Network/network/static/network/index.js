@@ -3,11 +3,30 @@ document.addEventListener('DOMContentLoaded', function (){
 
 // by default load new post
 document.querySelector('#all-posts-view').style.display = 'block';
+load_post('all', localStorage.getItem("current_section"))
 
-load_post('all')
+localStorage.setItem("current_section", 1)
+
+document.querySelectorAll('.page-link').forEach(button => {
+    button.addEventListener('click', function(){
+        stored_section = localStorage.getItem("current_section")
+        console.log(this.dataset.section)
+
+        if (this.dataset.section == "-1"){
+            current_section = stored_section - 1
+            localStorage.setItem("current_section", current_section)
+            console.log(`stored_section is ${stored_section} current is ${current_section}`)
+            load_post("all", current_section)
+
+        }
+        localStorage.setItem("current_section", this.dataset.section)
+
+        load_post("all",this.dataset.section) 
+    })
+} ) 
 
 // on headers click
-document.querySelector('#all-posts').addEventListener('click', () => load_post('all'))
+document.querySelector('#all-posts').addEventListener('click', () => load_post('all',1))
 document.querySelector('#add-post').addEventListener('click', () => compose())
 document.querySelector('#Following').addEventListener('click', () => load_post('following') )
 
@@ -40,7 +59,7 @@ function popify(view){
 
 // load posts from server
 
-function load_post(which){
+function load_post(which, section){
 
         // hide other view
 
@@ -50,7 +69,7 @@ function load_post(which){
         main_container = document.querySelector('#all-posts-view')
         main_container.innerHTML = ''
         //fetch for the posts
-        fetch(`/posts/${which}`)
+        fetch(`/posts/${which}/${section}`)
         .then(response => response.json())
         .then(posts => {
             console.log(posts)
@@ -71,6 +90,8 @@ function load_post(which){
                 post_container = document.createElement('div');
                 post_container.id = `post-container-${post_id}`
                 post_container.className += "tweet_container"
+
+
     
                 post_container.innerHTML = `
                 <div class="image_container">
@@ -101,12 +122,8 @@ function load_post(which){
                 `
 
                 main_container.append(post_container)   
-
-
-                
-
+                document.querySelector('#pagination_nav').style.display = "block";
             }
-
 
             return false
         });

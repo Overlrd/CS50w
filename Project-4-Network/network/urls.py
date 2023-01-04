@@ -11,7 +11,7 @@ urlpatterns = [
     #add post url
     path("posts", views.new_post, name="new_post"),
     #get posts
-    path("posts/<str:which>", views.posts, name="posts"),
+    path("posts/<str:which>/<int:page>", views.posts, name="posts"),
     #get user profile infos
     path("<str:username>/profile", views.profile_page, name='profile'),
     path("follow", views.follow_or_not, name="follows")

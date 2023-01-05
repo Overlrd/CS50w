@@ -325,9 +325,18 @@ width: 50px;
 }
 
 .page-item :hover {
-    background-color:var(--bg-primary);
+    background-color:#6649b8 ;
+    color: var(--text-primary);
+}
+
+.page-link{
+    color: white;
 }
 
 .pagination_nav {
     margin-top: 5%;
+}
+.page-item {
+    width: 5rem;
+    text-align: center;
 }

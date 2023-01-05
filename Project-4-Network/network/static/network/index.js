@@ -1,34 +1,16 @@
 // wait for the DOm content to load
 document.addEventListener('DOMContentLoaded', function (){
-
 // by default load new post
 document.querySelector('#all-posts-view').style.display = 'block';
-load_post('all', localStorage.getItem("current_section"))
-
 localStorage.setItem("current_section", 1)
 
-document.querySelectorAll('.page-link').forEach(button => {
-    button.addEventListener('click', function(){
-        stored_section = localStorage.getItem("current_section")
-        console.log(this.dataset.section)
-
-        if (this.dataset.section == "-1"){
-            current_section = stored_section - 1
-            localStorage.setItem("current_section", current_section)
-            console.log(`stored_section is ${stored_section} current is ${current_section}`)
-            load_post("all", current_section)
-
-        }
-        localStorage.setItem("current_section", this.dataset.section)
-
-        load_post("all",this.dataset.section) 
-    })
-} ) 
+current_local_storage_page = localStorage.getItem("current_section")
+load_post("sudo", current_local_storage_page)
 
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all',1))
 document.querySelector('#add-post').addEventListener('click', () => compose())
-document.querySelector('#Following').addEventListener('click', () => load_post('following') )
+document.querySelector('#Following').addEventListener('click', () => load_post('following', 1) )
 
 
 // overlay fonctions
@@ -68,13 +50,17 @@ function load_post(which, section){
         //document.querySelector('#all-posts-view').innerHTML = `<h3>${which.charAt(0).toUpperCase() + which.slice(1)} Posts</h3>`;
         main_container = document.querySelector('#all-posts-view')
         main_container.innerHTML = ''
+
+        pagination_page = document.querySelector('.pagination')
+        pagination_page.innerHTML=''
+
         //fetch for the posts
         fetch(`/posts/${which}/${section}`)
         .then(response => response.json())
         .then(posts => {
             console.log(posts)
 
-            for (const post of posts){
+            for (const post of posts['posts']){
                 post_id = post['id']
                 post_user = post['user']
                 post_content = post['body']
@@ -125,10 +111,76 @@ function load_post(which, section){
                 document.querySelector('#pagination_nav').style.display = "block";
             }
 
+            // 
+            previous_page = document.createElement('li')
+            previous_page.className += "page-item"
+            previous_page.innerHTML = '<a class="page-link" data-section="-1" href="#">Previous</a>'
+            listen_to_load(previous_page, which)
+
+            next_page = document.createElement('li')
+            next_page.className += "page-item"
+            next_page.innerHTML = '<a class="page-link" data-section="+1" href="#">Next</a>'
+            listen_to_load(next_page, which)
+
+            if (section == 1){
+                previous_page.style.display = "none"
+            }
+
+            if (section == parseInt(posts['num_pages'])){
+                next_page.style.display = "none"
+            }
+
+            pagination_page.append(previous_page)
+            
+            for (let i = 1; i < parseInt(posts['num_pages'])+1; i++){
+                let num = document.createElement('li')
+                num.innerHTML=`<a class="page-link" data-section="${i}" href="#">${i}</a>`
+                num.className += "page-item"
+                num.firstElementChild.setAttribute("id",`page_link_${i}`)
+                listen_to_load(num, which)
+
+                pagination_page.append(num)
+            }
+            pagination_page.append(next_page)
+
+
+            document.querySelector(`#page_link_${section}`).style.backgroundColor = "#6649b8"
+
+
+
+
             return false
         });
 
 
+}
+
+// function_load_from_page_menu
+function listen_to_load(args, which){
+    args.firstElementChild.addEventListener('click', function(){
+
+        stored_section = localStorage.getItem("current_section")
+        console.log(this.dataset.section)
+
+        if (this.dataset.section == "-1"){
+            current_section = parseInt(stored_section) - 1
+            if (current_section < 1){current_section = 1}
+            localStorage.setItem("current_section", current_section)
+            console.log(`stored_section is ${stored_section} current is ${current_section}`)
+            load_post(which, current_section)
+
+        }else if (this.dataset.section == "+1"){
+            current_section = parseInt(stored_section) + 1
+            localStorage.setItem("current_section", current_section)
+            console.log(`stored_section is ${stored_section} current is ${current_section}`)
+            load_post(which, current_section)
+        }
+        else{
+            localStorage.setItem("current_section", this.dataset.section)
+
+            load_post(which,this.dataset.section) 
+        }
+    })
 }
 
 // show compose form for new post

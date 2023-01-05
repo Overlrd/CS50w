@@ -124,17 +124,19 @@ def new_post(request):
 
 # view all postsr
 def posts(request, which, page):
+    json_response = {}
     if which == 'all':
         posts_to_return = Post.objects.all()
         posts_to_return = posts_to_return.order_by("-date")
-        json_response = [post.serialize() for post in posts_to_return]
-        print('all posts requested')
+        posts_response = [post.serialize() for post in posts_to_return]
         #use paginator
-        p = Paginator(json_response, 10)
+        p = Paginator(posts_response, 10)
         page1 = p.page(page)
-        return JsonResponse(page1.object_list, safe=False)
+        json_response['posts'] = page1.object_list
+        json_response['num_pages'] = p.num_pages
+        return JsonResponse(json_response, safe=False)
 
-    if which == "following":
+    elif which == "following":
         json_response = {}
         posts_list = []
         user = request.user
@@ -145,10 +147,30 @@ def posts(request, which, page):
             for i in all_posts:
                 posts_list.append(i)
 
-        json_response = [post.serialize() for post in posts_list]
-        print(posts_list)
-
+        posts_response = [post.serialize() for post in posts_list]
+        p = Paginator(posts_response, 10)
+        page1 = p.page(page)
+        json_response['posts'] = page1.object_list
+        json_response['num_pages'] = p.num_pages
         return JsonResponse(json_response, safe=False)
+
+    else :
+        try:
+            user = User.objects.get(username = which)
+            posts_to_return = user.related_posts.all()
+            posts_response = [post.serialize() for post in posts_to_return]
+
+            p = Paginator(posts_response, 10)
+            page1 = p.page(page)
+            json_response['posts'] = page1.object_list
+            json_response['num_pages'] = p.num_pages
+            print(json_response)
+            return JsonResponse(json_response, safe=False)
+
+        except Exception as e:
+            print(e)
+            return JsonResponse({"message": e}, status=404)
+
 
 
 

@@ -5,7 +5,7 @@ document.querySelector('#all-posts-view').style.display = 'block';
 localStorage.setItem("current_section", 1)
 
 current_local_storage_page = localStorage.getItem("current_section")
-load_post("sudo", current_local_storage_page)
+load_post("all", current_local_storage_page)
 
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all',1))
@@ -44,11 +44,15 @@ function popify(view){
 function load_post(which, section){
 
         // hide other view
+        if (which == "all" || "following"){
+            document.querySelector('#all-posts-view').style.display = 'block';
+            document.querySelector('#compose-view').style.display = 'none';
+            main_container = document.querySelector('#all-posts-view')
+        }else {
+            main_container = document.querySelector('#toggle_view_container')
+        }
 
-        document.querySelector('#all-posts-view').style.display = 'block';
-        document.querySelector('#compose-view').style.display = 'none';
-        //document.querySelector('#all-posts-view').innerHTML = `<h3>${which.charAt(0).toUpperCase() + which.slice(1)} Posts</h3>`;
-        main_container = document.querySelector('#all-posts-view')
+
         main_container.innerHTML = ''
 
         pagination_page = document.querySelector('.pagination')
@@ -220,5 +224,7 @@ document.querySelector('#compose-form').onsubmit = () => {
     
 
 
-
 })
+
+module.exports = {listen_to_load, load_post};
+

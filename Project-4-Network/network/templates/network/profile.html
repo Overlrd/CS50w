@@ -53,46 +53,18 @@
         </div>
         <div id="toggle_view_container" class="toggle_view">
 
-            {% for  post  in  response.post_objects %}
-
-                <div class="tweet_container" style="">
-                    <div class="image_container">
-                            <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
-                    </div>
-                
-                
-                    <div class="tweet_body_container" >
-                        <div class="tweet_header_container">
-                            <span class="tweet_username" >{{post.user}}</span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">23 Dec</span>
-                
-                        </div>
-                        <div class="tweet_body_text">
-                            <p id="tweet_body_text">
-                                {{post.body}}
-                            </p>
-                        </div>
-                        <div class="tweet_footer">
-                            <div class="tweet_footer_item">
-                                <span>
-                                    {% if post.likes > 0 %}
-                                        <i class="fa-solid fa-heart liked"></i>
-                                    {% else %}
-                                        <i class="fa-solid fa-heart "></i>
-
-                                    {% endif %}
-                                </span>
-                                <p>{{post.likes}}</p>
-                            </div>
-                
-                        </div>
-                    </div>
-                
-                </div>
-
-            {% endfor %}
-
 
         </div>
+
+        <nav id="pagination_nav" class="pagination_nav" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" data-section="-1" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" data-section="+1" href="#">Next</a></li>
+
+
+            </ul>
+        
+        </nav>
 
     </div>
 
@@ -103,6 +75,8 @@
 
 
 {% block script %}
-<script src="{% static 'network/profile.js' %}"></script>
+<script type="module"  src="{% static 'network/index.js' %}"></script>
+<script type="module" src="{% static 'network/profile.js' %}"></script>
+
 {% endblock %} 
 

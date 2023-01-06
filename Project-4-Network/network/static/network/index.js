@@ -1,11 +1,25 @@
 // wait for the DOm content to load
 document.addEventListener('DOMContentLoaded', function (){
 // by default load new post
-document.querySelector('#all-posts-view').style.display = 'block';
-localStorage.setItem("current_section", 1)
+console.log('index js running here')
 
+localStorage.setItem("current_section", 1)
 current_local_storage_page = localStorage.getItem("current_section")
-load_post("all", current_local_storage_page)
+
+var user_exist = document.querySelector('#profiled_user_name') 
+if (user_exist){
+    console.log('user exists on this page')
+    load_post(user_exist.value, current_local_storage_page)
+
+}else {
+    document.querySelector('#all-posts-view').style.display = 'block';
+    load_post("all", current_local_storage_page)
+    console.log('calling loadpost all')
+}
+
+
+
+
 
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all',1))
@@ -42,9 +56,11 @@ function popify(view){
 // load posts from server
 
 function load_post(which, section){
+    console.log(`called with ${which}`)
 
         // hide other view
-        if (which == "all" || "following"){
+        if (which == "all" || which == "following"){
+            console.log('load post called with all or following')
             document.querySelector('#all-posts-view').style.display = 'block';
             document.querySelector('#compose-view').style.display = 'none';
             main_container = document.querySelector('#all-posts-view')
@@ -224,7 +240,4 @@ document.querySelector('#compose-form').onsubmit = () => {
     
 
 
-})
-
-module.exports = {listen_to_load, load_post};
-
+})  

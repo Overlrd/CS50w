@@ -1,9 +1,5 @@
-import { load_post, listen_to_load } from "./index.js";
 document.addEventListener('DOMContentLoaded', function() {
 
-localStorage.setItem("current_section_profile", 1)
-current_section = localStorage.getItem("current_section_profile")
-load_post("sudo", current_section)
 
 Follow_button = document.querySelector('#follow_btn');
 profiled_user = document.querySelector('#profiled_user').value;

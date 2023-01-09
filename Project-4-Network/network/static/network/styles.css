@@ -30,6 +30,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    overflow-x: hidden;
 }
 
 
@@ -108,6 +109,12 @@ width: 50px;
     display: flex;
     margin: 10px;
 }
+
+.tweet_header_container:last-child {
+    margin: auto;
+}
+
+
 .tweet_container .tweet_username {
     margin-right: 10px;
     font-weight: bold;
@@ -339,4 +346,27 @@ width: 50px;
 .page-item {
     width: 5rem;
     text-align: center;
+}
+
+
+.dropdown-menu {
+    text-align: center;
+}
+
+.dropdown-menu a {
+    width: 100%;
+}
+
+.dropdown-menu a :hover{
+}
+
+.dropdown-menu :hover{
+}
+
+.tweet_header_edit{
+    width: auto;
+}
+
+.edit_tweet_button :hover {
+    cursor: pointer;
 }

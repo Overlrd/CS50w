@@ -105,21 +105,22 @@ def profile_page(request,username):
 
 @csrf_exempt
 @login_required
-def new_post(request):
-    #assert the post method
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required"}, status=400)
+def new_post(request, action):
+    if action == "add":
+        #assert the post method
+        if request.method != "POST":
+            return JsonResponse({"error": "POST request required"}, status=400)
 
-    # get the content of the post 
-    data = json.loads(request.body)
-    post_content = data.get("body", "")
-    post_user = request.user
+        # get the content of the post 
+        data = json.loads(request.body)
+        post_content = data.get("body", "")
+        post_user = request.user
 
-    new_post = Post(user = post_user, content = post_content)
-    new_post.save()
-    print(new_post)
+        new_post = Post(user = post_user, content = post_content)
+        new_post.save()
+        print(new_post)
 
-    return JsonResponse({"message": "Post added successfully"}, status=201)
+        return JsonResponse({"message": "Post added successfully"}, status=201)
 
 
 # view all postsr

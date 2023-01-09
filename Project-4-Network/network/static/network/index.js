@@ -23,7 +23,7 @@ if (user_exist){
 
 // on headers click
 document.querySelector('#all-posts').addEventListener('click', () => load_post('all',1))
-document.querySelector('#add-post').addEventListener('click', () => compose())
+document.querySelector('#add-post').addEventListener('click', () => compose(null))
 document.querySelector('#Following').addEventListener('click', () => load_post('following', 1) )
 
 
@@ -37,6 +37,7 @@ document.getElementById("overlay").style.display = "none";
 }
 
 document.querySelector('#close_span').addEventListener('click', function (){
+    document.querySelector('#compose-body').value = '';
     overlay_off()
 })
 
@@ -108,7 +109,9 @@ function load_post(which, section){
                 <div class="tweet_body_container" >
                     <div class="tweet_header_container">
                         <span class="tweet_username"> <a href="${post_user}/profile"> <p> ${post_user} </p> </a> </span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
-
+                        <span style="margin-left: auto;" class="tweet_header_edit">
+                            <p><a data-tweet_id=${post_id} class="edit_tweet_button" href="#">Edit</a></p>
+                        </span>
                     </div>
                     <div class="tweet_body_text">
                         <p id="tweet_body_text">
@@ -205,9 +208,20 @@ function listen_to_load(args, which){
 
 // show compose form for new post
 
-function compose(){
+function compose(content){
     //document.querySelector('#all-posts-view').style.display = 'none';
-    document.querySelector('#compose-view').style.display = 'block';
+    compose_view = document.querySelector('#compose-view')
+    compose_view.style.display = 'block';
+    if (content !== null ){
+        document.querySelector('#compose-body').value = `${content}`
+        compose_view.querySelector('#compose-submit').textContent = "Save"
+        compose_view.querySelector("#compose-submit").dataset.action = "edit";
+    }else{
+        compose_view.querySelector('#compose-submit').textContent = "Tweet"
+        compose_view.querySelector("#compose-submit").dataset.action = "new";
+
+
+    }
     popify('#compose-view')
 }
 
@@ -223,21 +237,41 @@ document.querySelector('#compose-body').addEventListener('keyup', function (){
 
 
 // send post to server
-document.querySelector('#compose-form').onsubmit = () => {
+document.querySelector('#compose-form').onsubmit = function(){
+    compose_view = document.querySelector('#compose-view')
+    action = compose_view.querySelector('#compose-submit').dataset.action;
+    console.log(`${action}`)
+
     const body = document.querySelector('#compose-body').value;
-    // pass a post request to the backend
-    fetch('/posts', {
-    method: 'POST',
-    body: JSON.stringify({
-        body: body
-    })
-    })
-    .then(response => response.json())
-    .then(function () {
-        document.location.href="/"
-    });
+    if (action == "edit" ){
+        //send  a POST request to edit the post
+
+    }else if (action == "new"){
+            // pass a post request to the backend
+            fetch('/posts/add', {
+                method: 'POST',
+                body: JSON.stringify({
+                    body: body
+                })
+                })
+                .then(response => response.json())
+                .then(function () {
+                    document.location.href="/"
+                });
+    }else {console.log(`compose action neither edit or now }`)}
     }
     
+// edit post 
+document.addEventListener('click', function(e){
+    if(e.target.className == "edit_tweet_button"){
+     //alert(`tweet ${e.target.dataset.tweet_id}`);
+     parent_tweet_container = document.querySelector(`#post-container-${e.target.dataset.tweet_id}`)
+     tweet_content = parent_tweet_container.querySelector('#tweet_body_text').innerHTML
+     console.log(`${parent_tweet_container} ${tweet_content}`)
+     // open compose form with the tweet's content
+     compose(tweet_content.trim())
+    }
+  })
 
 
 })  

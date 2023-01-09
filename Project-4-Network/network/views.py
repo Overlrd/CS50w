@@ -7,6 +7,7 @@ from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
 
 
 from .models import User, Post, Like, Follow
@@ -80,10 +81,14 @@ def profile_page(request,username):
     if str(request.user) != "AnonymousUser":
         request_user = User.objects.get(username = request.user)
         #check if the request user is following the profiled user
-        if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) :
-            json_response['following'] = True
-        else:
-            json_response['following'] = False
+        try :
+
+            if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) > 0 :
+                json_response['following'] = True
+            else:
+                json_response['following'] = False
+        except ObjectDoesNotExist:
+            json_response['following'] = False 
     else:
         request_user = None
 
@@ -233,3 +238,32 @@ def follow_or_not(request):
             return JsonResponse({"message": " successfully"}, status=201)
 
     
+def like_unlike(request):
+    if request.method == "POST":
+                # get the content of the request
+        data = json.loads(request.body)
+        action = data.get("action", "")
+        post_id = data.get("tweet", "")
+
+        if action == "like":
+            try:
+                user_likes_list , created = Like.objects.get_or_create(user = request.user)
+                user_likes_list.add(post_id)
+                return JsonResponse({"message" : "Post liked "}, status=201)
+            except Exception as e :
+                print(e)
+                return JsonResponse({"error" : " error processing this action "}, status=400)
+
+        elif action == "unlike":
+            try :
+                user_likes_list = Like.objects.get(user = request.user )
+                user_likes_list.remove(post_id)
+
+                return JsonResponse({"message" : "Post Unliked "}, status=201)
+            except Exception as e :
+                print(e)
+                return JsonResponse({"error" : " error processing this action "}, status=400)
+        else :
+
+            return JsonResponse({"error" : " action should be 'like' or 'unlike' "}, status=400)
+

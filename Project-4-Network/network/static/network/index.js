@@ -59,7 +59,7 @@ function popify(view){
 
 function load_post(which, section){
     console.log(`called with ${which}`)
-        overlay_off()
+        //overlay_off()
 
         // hide other view
         if (which == "all" || which == "following"){
@@ -129,7 +129,7 @@ function load_post(which, section){
                     <div class="tweet_footer">
                         <div class="tweet_footer_item">
                             <span>
-                                <i class="fa-solid fa-heart ${liked}"></i>
+                                <i class="fa-solid fa-heart like_icon ${liked}"></i>
                             </span>
                             <p>${post_num_like}</p>
                         </div>
@@ -267,6 +267,7 @@ document.querySelector('#compose-form').onsubmit = function(){
         })
         .then(response => response.json())
         .then( function () {
+            overlay_off()
             load_post("all", current_local_storage_page)
         });
 
@@ -299,3 +300,15 @@ document.addEventListener('click', function(e){
 
 
 })  
+
+// like unlike 
+function like_unlike(action,post_id){
+    fetch('/')
+}
+
+document.addEventListener("click", function(e){
+    if (e.target.className.includes("like_icon")){
+        console.log('like icon clicked ')
+        // like or unlike function here 
+    }
+})

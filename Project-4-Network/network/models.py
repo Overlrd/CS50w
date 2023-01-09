@@ -17,6 +17,7 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
+        print([like.user for like in self.related_likes.all()])
         return {
             "id": self.id,
             "user": self.user.username,

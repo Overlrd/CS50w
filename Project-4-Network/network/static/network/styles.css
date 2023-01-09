@@ -357,12 +357,6 @@ width: 50px;
     width: 100%;
 }
 
-.dropdown-menu a :hover{
-}
-
-.dropdown-menu :hover{
-}
-
 .tweet_header_edit{
     width: auto;
 }
@@ -373,4 +367,14 @@ width: 50px;
 
 .display_hidden {
     display: none!important;
+}
+
+
+.tweet_footer_item span i {
+    cursor: pointer;
+}
+
+.tweet_footer_item span i :hover {
+    font-size: 8rem;
+    color: blue;
 }

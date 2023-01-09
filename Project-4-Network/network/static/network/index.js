@@ -6,18 +6,19 @@ console.log('index js running here')
 localStorage.setItem("current_section", 1)
 current_local_storage_page = localStorage.getItem("current_section")
 
+// if were on profile page (check if we have the profiled_user_name input) 
+// load this profiled_user_name profile 
 var user_exist = document.querySelector('#profiled_user_name') 
 if (user_exist){
     console.log('user exists on this page')
     load_post(user_exist.value, current_local_storage_page)
+// if we are not on any profile page (profiled_user_name not found) load all posts 
 
 }else {
     document.querySelector('#all-posts-view').style.display = 'block';
     load_post("all", current_local_storage_page)
     console.log('calling loadpost all')
 }
-
-
 
 
 
@@ -58,6 +59,7 @@ function popify(view){
 
 function load_post(which, section){
     console.log(`called with ${which}`)
+        overlay_off()
 
         // hide other view
         if (which == "all" || which == "following"){
@@ -98,6 +100,12 @@ function load_post(which, section){
                 post_container.id = `post-container-${post_id}`
                 post_container.className += "tweet_container"
 
+                if (document.querySelector('#request_user').value !== post_user){
+                    viewable = 'display_hidden'
+                }else {
+                    viewable = ''
+                }
+
 
     
                 post_container.innerHTML = `
@@ -109,7 +117,7 @@ function load_post(which, section){
                 <div class="tweet_body_container" >
                     <div class="tweet_header_container">
                         <span class="tweet_username"> <a href="${post_user}/profile"> <p> ${post_user} </p> </a> </span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
-                        <span style="margin-left: auto;" class="tweet_header_edit">
+                        <span style="margin-left: auto;" class=" ${viewable} tweet_header_edit">
                             <p><a data-tweet_id=${post_id} class="edit_tweet_button" href="#">Edit</a></p>
                         </span>
                     </div>
@@ -208,7 +216,7 @@ function listen_to_load(args, which){
 
 // show compose form for new post
 
-function compose(content){
+function compose(content, tweet_to_edit){
     //document.querySelector('#all-posts-view').style.display = 'none';
     compose_view = document.querySelector('#compose-view')
     compose_view.style.display = 'block';
@@ -216,6 +224,7 @@ function compose(content){
         document.querySelector('#compose-body').value = `${content}`
         compose_view.querySelector('#compose-submit').textContent = "Save"
         compose_view.querySelector("#compose-submit").dataset.action = "edit";
+        compose_view.querySelector("#compose-submit").dataset.tweet = `${tweet_to_edit}`
     }else{
         compose_view.querySelector('#compose-submit').textContent = "Tweet"
         compose_view.querySelector("#compose-submit").dataset.action = "new";
@@ -238,13 +247,28 @@ document.querySelector('#compose-body').addEventListener('keyup', function (){
 
 // send post to server
 document.querySelector('#compose-form').onsubmit = function(){
-    compose_view = document.querySelector('#compose-view')
-    action = compose_view.querySelector('#compose-submit').dataset.action;
+    compose_view = document.querySelector('#compose-view');
+    dataset = compose_view.querySelector('#compose-submit').dataset;
+    action = dataset.action ;
     console.log(`${action}`)
-
     const body = document.querySelector('#compose-body').value;
+
+
     if (action == "edit" ){
-        //send  a POST request to edit the post
+        //send  a POST request to edit the server 
+        const tweet = dataset.tweet ;
+        console.log(`should send edit request for post ${tweet}`)
+        fetch('/posts/edit', {
+            method: 'POST',
+            body : JSON.stringify({
+                tweet : tweet,
+                body : body
+            })
+        })
+        .then(response => response.json())
+        .then( function () {
+            load_post("all", current_local_storage_page)
+        });
 
     }else if (action == "new"){
             // pass a post request to the backend
@@ -269,7 +293,7 @@ document.addEventListener('click', function(e){
      tweet_content = parent_tweet_container.querySelector('#tweet_body_text').innerHTML
      console.log(`${parent_tweet_container} ${tweet_content}`)
      // open compose form with the tweet's content
-     compose(tweet_content.trim())
+     compose(tweet_content.trim(), e.target.dataset.tweet_id)
     }
   })
 

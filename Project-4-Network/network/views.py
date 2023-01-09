@@ -121,6 +121,42 @@ def new_post(request, action):
         print(new_post)
 
         return JsonResponse({"message": "Post added successfully"}, status=201)
+    elif action == "edit":
+                #assert the post method
+        if request.method != "POST":
+            return JsonResponse({"error": "POST request required"}, status=400)
+
+        # get the content of the post 
+        data = json.loads(request.body)
+        post_content = data.get("body", "")
+        post_id = data.get("tweet", "")
+        post_user = request.user
+
+        post_to_edit = Post.objects.get(pk = int(post_id))
+
+        #if the request user own the post :
+        if str(post_user) == str(post_to_edit.user): 
+            print(f'should update post {post_to_edit.user} by {post_user}')
+            try:
+
+                post_to_edit.content = post_content
+                post_to_edit.save()
+                print('post updated')
+                return JsonResponse({"message": "Post added successfully"}, status=201)
+
+            except Exception as e:
+                print(e)
+                return JsonResponse({"error": "Error editing post"}, status=400)
+
+
+        else :
+        #if the request user dont own the post
+            print('this user cant update this post ')
+            return JsonResponse({"error": "Action not allowed for current user "}, status=400)
+    else :
+            return JsonResponse({"error": "Inexisting Route"}, status=400)
+
+        
 
 
 # view all postsr

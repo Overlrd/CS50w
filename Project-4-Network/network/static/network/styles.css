@@ -370,3 +370,7 @@ width: 50px;
 .edit_tweet_button :hover {
     cursor: pointer;
 }
+
+.display_hidden {
+    display: none!important;
+}

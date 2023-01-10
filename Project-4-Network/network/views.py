@@ -237,7 +237,9 @@ def follow_or_not(request):
             follow_list.followed_users.remove(followed_user)
             return JsonResponse({"message": " successfully"}, status=201)
 
-    
+
+@csrf_exempt
+@login_required 
 def like_unlike(request):
     if request.method == "POST":
                 # get the content of the request
@@ -248,7 +250,7 @@ def like_unlike(request):
         if action == "like":
             try:
                 user_likes_list , created = Like.objects.get_or_create(user = request.user)
-                user_likes_list.add(post_id)
+                user_likes_list.posts.add(post_id)
                 return JsonResponse({"message" : "Post liked "}, status=201)
             except Exception as e :
                 print(e)
@@ -257,7 +259,7 @@ def like_unlike(request):
         elif action == "unlike":
             try :
                 user_likes_list = Like.objects.get(user = request.user )
-                user_likes_list.remove(post_id)
+                user_likes_list.posts.remove(post_id)
 
                 return JsonResponse({"message" : "Post Unliked "}, status=201)
             except Exception as e :

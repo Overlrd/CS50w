@@ -17,13 +17,14 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
-        print([like.user for like in self.related_likes.all()])
+        print([like.user.pk for like in self.related_likes.all()])
         return {
             "id": self.id,
             "user": self.user.username,
             "body": self.content,
             "timestamp": self.date.strftime("%b %d %Y, %I:%M %p"),
-            "likes" :  len(self.related_likes.all())
+            "num_likes" :  len(self.related_likes.all()),
+            "likes_list": [like.user.username for like in self.related_likes.all()]
         }
 
     def __str__(self):

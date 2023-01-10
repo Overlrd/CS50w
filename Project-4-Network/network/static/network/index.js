@@ -88,8 +88,9 @@ function load_post(which, section){
                 post_user = post['user']
                 post_content = post['body']
                 post_timestamp = post['timestamp']
-                post_num_like = post['likes']
-                if( parseInt(post_num_like) > 0 ){
+                post_num_like = post['num_likes']
+                post_likes_list = post['likes_list']
+                if( post_likes_list.includes(document.querySelector('#request_user').value) ){
                     liked = "liked";}
                 else {
                     liked=''
@@ -129,7 +130,7 @@ function load_post(which, section){
                     <div class="tweet_footer">
                         <div class="tweet_footer_item">
                             <span>
-                                <i class="fa-solid fa-heart like_icon ${liked}"></i>
+                                <i data-tweet_id="${post_id}" class="fa-solid fa-heart like_icon ${liked}"></i>
                             </span>
                             <p>${post_num_like}</p>
                         </div>
@@ -299,16 +300,40 @@ document.addEventListener('click', function(e){
   })
 
 
-})  
+  // like unlike 
 
-// like unlike 
-function like_unlike(action,post_id){
-    fetch('/')
-}
 
-document.addEventListener("click", function(e){
+document.addEventListener("click", (e) => {
     if (e.target.className.includes("like_icon")){
         console.log('like icon clicked ')
-        // like or unlike function here 
+        console.log(e.target.dataset.tweet_id)
+        // if post is already liked (have liked in classname , unlike it)
+        if (e.target.className.includes('liked')){
+            action = "unlike"
+        }else {
+            action = "like"
+        }
+        fetch('/like', {
+            method: 'POST',
+            body: JSON.stringify({
+                action: action,
+                tweet: `${e.target.dataset.tweet_id}`
+            })
+        })
+        .then(response => response.json())
+        .then(function () {
+            console.log('post liked ')
+/*             e.target.animate([
+                // Keyframes
+                {color :"red"}
+            ], {
+                duration:300
+            }) */
+            e.target.style.color = 'red'
+            load_post("all", current_local_storage_page)
+        });
     }
 })
+
+})  
+

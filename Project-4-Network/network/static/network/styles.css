@@ -374,7 +374,7 @@ width: 50px;
     cursor: pointer;
 }
 
-.tweet_footer_item span i :hover {
-    font-size: 8rem;
-    color: blue;
+.tweet_footer_item span i:hover {
+    font-size: 1.5rem;
+    transition: all 300ms;
 }

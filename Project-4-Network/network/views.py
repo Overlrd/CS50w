@@ -50,6 +50,8 @@ def register(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
 
+        profile_image_url = request.POST['profile_image_url']
+
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -60,7 +62,7 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username ,email, password, first_name = first_name, last_name=last_name)
+            user = User.objects.create_user(username ,email, password, first_name = first_name, last_name=last_name, profile_image_url = profile_image_url)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -82,8 +84,9 @@ def profile_page(request,username):
         request_user = User.objects.get(username = request.user)
         #check if the request user is following the profiled user
         try :
-
-            if len(request_user.related_follows.get().followed_users.filter(pk = user.pk)) > 0 :
+            user_follows = request_user.related_follows.get().followed_users
+            json_response['num_followers'] = len(user_follows.all())
+            if len(user_follows.filter(pk = user.pk)) > 0 :
                 json_response['following'] = True
             else:
                 json_response['following'] = False
@@ -92,8 +95,11 @@ def profile_page(request,username):
     else:
         request_user = None
 
-    all_posts = user.related_posts.all()
-    all_posts = all_posts.order_by("-date")
+    subscriptions , created = Follow.objects.get_or_create(user = user )
+    json_response['num_subscriptions'] = len(subscriptions.followed_users.all())
+
+    all_posts = user.related_posts.all().order_by("id")
+    #all_posts = all_posts
     json_response['id'] = user.pk
     json_response["username"] = user.username
     json_response['first_name']  = user.first_name
@@ -101,7 +107,9 @@ def profile_page(request,username):
     json_response['date_joined'] = user.date_joined
     json_response['user_email'] = user.email
     json_response['num_posts'] = len(all_posts)
-    json_response['post_objects'] = [post.serialize() for post in all_posts ]
+    json_response['picture_url'] = user.profile_image_url
+    #json_response['post_objects'] = [post.serialize() for post in all_posts ]
+
     return render(request, "network/profile.html",{
         'response':json_response
     })
@@ -190,6 +198,7 @@ def posts(request, which, page):
                 posts_list.append(i)
 
         posts_response = [post.serialize() for post in posts_list]
+        posts_response.reverse()
         p = Paginator(posts_response, 10)
         page1 = p.page(page)
         json_response['posts'] = page1.object_list
@@ -200,18 +209,20 @@ def posts(request, which, page):
         try:
             user = User.objects.get(username = which)
             posts_to_return = user.related_posts.all()
+            posts_to_return = posts_to_return.order_by("-date")
+
             posts_response = [post.serialize() for post in posts_to_return]
 
             p = Paginator(posts_response, 10)
             page1 = p.page(page)
             json_response['posts'] = page1.object_list
             json_response['num_pages'] = p.num_pages
-            print(json_response)
             return JsonResponse(json_response, safe=False)
 
         except Exception as e:
             print(e)
-            return JsonResponse({"message": e}, status=404)
+            #return JsonResponse({"message": e}, status=404)
+            return render(request, "network/index.html")
 
 
 

@@ -26,7 +26,8 @@
                 <li class="nav-item" >
                     <a class="custom_nav-link" href="#">   
                         <span class="link-text" style="text-align: center;">
-                            <h1>{{ user.username }}</h1>
+                            <small>                            {{ user.username }}
+                            </small>
                         </span>
                     </a>
                 </li>
@@ -62,7 +63,7 @@
                 <li class="nav-item">
                     <a href="{% url 'logout' %}" class="custom_nav-link">
                         <span class="link-text">
-                            Logout
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         </span>
                     </a>
 
@@ -98,7 +99,7 @@
             </ul>
         </nav>
 
-             <div style="margin-top: 5%; margin-left: 15%; width: 100%;" >
+             <div class="layout_container" style="" >
                 {% block body %}
                 {% endblock %}
             </div> 

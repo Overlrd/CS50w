@@ -22,7 +22,7 @@
             </div>
             <div class="profile-header">
                 <div class="profile-image">
-                    <img src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">
+                    <img src="{{response.picture_url}}" alt="" >
                 </div>
 
                 <div class="profile-infos">
@@ -45,8 +45,8 @@
             <p id="user_profile_joined_date">{{response.date_joined}} </p>
 
             <div class="subscriber_view">
-                <p id="user_profile_subscriptions">78 Subscriptions </p>
-                <p id="user_profile_subscribers">678 Subsscribers</p>
+                <p id="user_profile_subscriptions">{{response.num_subscriptions}} Subscriptions </p>
+                <p id="user_profile_subscribers">{{response.num_followers}} Subsscriber(s)</p>
 
             </div>
             <p id="user_profile_num_posts">{{response.num_posts}} Posts </p>

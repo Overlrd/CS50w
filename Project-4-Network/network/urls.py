@@ -13,7 +13,7 @@ urlpatterns = [
     #get posts
     path("posts/<str:which>/<int:page>", views.posts, name="posts"),
     #get user profile infos
-    path("<str:username>/profile", views.profile_page, name='profile'),
+    path("profile/<str:username>", views.profile_page, name='profile'),
     path("follow", views.follow_or_not, name="follows"),
     #like or unlike a post
     path("like", views.like_unlike, name="like_unlike")

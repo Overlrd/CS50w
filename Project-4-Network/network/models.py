@@ -5,6 +5,7 @@ from django.db import models
 class User(AbstractUser):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
+    profile_image_url = models.CharField(max_length=120)
 
 
 
@@ -17,10 +18,10 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
-        print([like.user.pk for like in self.related_likes.all()])
         return {
             "id": self.id,
             "user": self.user.username,
+            "user_image" : self.user.profile_image_url,
             "body": self.content,
             "timestamp": self.date.strftime("%b %d %Y, %I:%M %p"),
             "num_likes" :  len(self.related_likes.all()),

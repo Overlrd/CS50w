@@ -11,6 +11,13 @@ current_local_storage_page = localStorage.getItem("current_section")
 var user_exist = document.querySelector('#profiled_user_name') 
 if (user_exist){
     console.log('user exists on this page')
+    try{
+        document.querySelector('#Following').style.display = 'none';
+        document.querySelector('#add-post').style.display = "none";
+    } catch (e) {
+        console.log(e)
+    }
+
     load_post(user_exist.value, current_local_storage_page)
 // if we are not on any profile page (profiled_user_name not found) load all posts 
 
@@ -18,6 +25,13 @@ if (user_exist){
     document.querySelector('#all-posts-view').style.display = 'block';
     load_post("all", current_local_storage_page)
     console.log('calling loadpost all')
+}
+
+// window onpopstate
+window.onpopstate = function(event){
+    console.log(event.state)
+    console.log()
+    load_post(String(event.state.custom_state.which_box), event.state.custom_state.section)
 }
 
 
@@ -58,8 +72,17 @@ function popify(view){
 // load posts from server
 
 function load_post(which, section){
+
     console.log(`called with ${which}`)
-        //overlay_off()
+
+    var custom_state = {'which_box': which, 'section': section};
+    history.pushState({custom_state}, '', `#`);
+
+        try{
+            overlay_off()
+        }catch{
+            console.log('overlay not found')
+        }
 
         // hide other view
         if (which == "all" || which == "following"){
@@ -71,8 +94,14 @@ function load_post(which, section){
             main_container = document.querySelector('#toggle_view_container')
         }
 
+        //header
+        page_header = document.createElement('div')
+        page_header.className += 'tweet_container justify-content-center'
+        page_header.innerHTML = `<h1> ${which.charAt(0).toUpperCase() + which.slice(1)} Posts </h1>`
+
 
         main_container.innerHTML = ''
+        main_container.append(page_header)
 
         pagination_page = document.querySelector('.pagination')
         pagination_page.innerHTML=''
@@ -83,6 +112,8 @@ function load_post(which, section){
         .then(posts => {
             console.log(posts)
 
+            
+
             for (const post of posts['posts']){
                 post_id = post['id']
                 post_user = post['user']
@@ -90,12 +121,12 @@ function load_post(which, section){
                 post_timestamp = post['timestamp']
                 post_num_like = post['num_likes']
                 post_likes_list = post['likes_list']
+                post_user_image = post['user_image']
                 if( post_likes_list.includes(document.querySelector('#request_user').value) ){
                     liked = "liked";}
                 else {
                     liked=''
-                }
-    
+                }    
     
                 post_container = document.createElement('div');
                 post_container.id = `post-container-${post_id}`
@@ -111,13 +142,13 @@ function load_post(which, section){
     
                 post_container.innerHTML = `
                 <div class="image_container">
-                <img  src="https://i.imgur.com/0PmI3ZD.png" alt="" srcset="">                    
+                <img  src="${post_user_image}" alt="" srcset="">                    
                 </div>
 
 
                 <div class="tweet_body_container" >
                     <div class="tweet_header_container">
-                        <span class="tweet_username"> <a href="${post_user}/profile"> <p> ${post_user} </p> </a> </span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
+                        <span class="tweet_username"> <a href="/profile/${post_user}"> <p> ${post_user} </p> </a> </span>  <span class="tweet_user_at" >SudoOverloord</span> <span class="tweet_date">${post_timestamp}</span>
                         <span style="margin-left: auto;" class=" ${viewable} tweet_header_edit">
                             <p><a data-tweet_id=${post_id} class="edit_tweet_button" href="#">Edit</a></p>
                         </span>
@@ -282,7 +313,7 @@ document.querySelector('#compose-form').onsubmit = function(){
                 })
                 .then(response => response.json())
                 .then(function () {
-                    document.location.href="/"
+                    load_post("all", current_local_storage_page)
                 });
     }else {console.log(`compose action neither edit or now }`)}
     }

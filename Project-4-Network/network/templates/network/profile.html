@@ -1,0 +1,82 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+
+{% block body %}
+
+<input type="hidden" id="profiled_user" value="{{response.id}}">
+<input type="hidden" id="profiled_user_name" value="{{response.username}}">
+<input type="hidden" id="request_user" value="{{request.user.id}}">
+
+
+
+<div class="profile_base_container">
+    <div class="container">
+
+        <div class="profile-container ">
+            <div class="profile-title">
+                <span class="profile_back_span" >
+                    <i class="fa-solid fa-arrow-left" id="profile_back_arrow" style="cursor: pointer;"></i>
+                </span>
+               <p>{{response.first_name}}</p>
+            </div>
+            <div class="profile-header">
+                <div class="profile-image">
+                    <img src="{{response.picture_url}}" alt="" >
+                </div>
+
+                <div class="profile-infos">
+                {% if user.is_authenticated %}
+                    {% if response.following %}
+                        <button id="follow_btn" class="btn btn-primary">unfollow</button>
+                    {% else %}
+                        <button id="follow_btn" class="btn btn-primary">follow</button>
+
+                    {% endif %}
+                {% endif %}
+                </div>
+
+            </div>
+        </div>
+        <div class="user_container">
+            <h4>{{ response.first_name }} {{ response.last_name }} </h4>
+            <h4 id="user_profile_name">  @{{response.username}} </h4>
+            <p id="user_profile_mail">{{response.user_email}}</p>
+            <p id="user_profile_joined_date">{{response.date_joined}} </p>
+
+            <div class="subscriber_view">
+                <p id="user_profile_subscriptions">{{response.num_subscriptions}} Subscriptions </p>
+                <p id="user_profile_subscribers">{{response.num_followers}} Subsscriber(s)</p>
+
+            </div>
+            <p id="user_profile_num_posts">{{response.num_posts}} Posts </p>
+        </div>
+        <div id="toggle_view_container" class="toggle_view">
+
+
+        </div>
+
+        <nav id="pagination_nav" class="pagination_nav" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" data-section="-1" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" data-section="+1" href="#">Next</a></li>
+
+
+            </ul>
+        
+        </nav>
+
+    </div>
+
+</div>
+
+
+{% endblock body %}
+
+
+{% block script %}
+<script   src="{% static 'network/index.js' %}"></script>
+<script  src="{% static 'network/profile.js' %}"></script>
+
+{% endblock %} 
+

@@ -46,10 +46,11 @@ body::-webkit-scrollbar-thumb {
 }
 
 .custom_navbar {
-    width: 5rem;
-    height: 100vh;
+/*     width: 5rem;
+    height: 100vh; */
     position: fixed;
     background-color: var(--bg-secondary);
+    transition: width 200ms ease;
 }
 
 .custom_navbar-nav {
@@ -67,6 +68,12 @@ body::-webkit-scrollbar-thumb {
     width: 100%;
 }
 
+
+.link-text {
+    display: none;
+    margin-left: 1rem;
+}
+
 .nav-item:last-child {
     margin-top: auto;
 }
@@ -77,8 +84,59 @@ body::-webkit-scrollbar-thumb {
     height: 5rem;
     color: var(--text-primary);
     text-decoration: none;
-
+    filter: grayscale(100%) opacity(°.7);
+    transition: var(--transition-speed);
 }
+
+.custom_nav-link:hover{
+    filter: grayscale(0%) opacity(1);
+    background:#6649b8;
+    color: var(--text-secondary);
+}
+
+.custom_nav-link i {
+    min-width: 2rem;
+    margin: 0 1.5rem;
+}
+
+/* .custom_navbar:hover{
+    width: 16rem;
+} */
+/* .custom_navbar:hover  .link-text {
+    display: block;
+} */
+.custom_navbar:hover .logo_i{
+    display: none;
+}
+.fa-primary {
+    color: #ff7eee;
+}
+.fa-secondary {
+    color: #df49a6;
+}
+
+.fa-primary, 
+.fa-secondary{
+    transform: var(--transition-speed);
+}
+
+
+.logo {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    letter-spacing: 0.3ch;
+    width: 100%;
+    justify-content: center;
+    background-color: rgb(60, 36, 83);
+}
+
+
+/* navbar above
+ */
 
 .tweet_footer {
     display: flex;
@@ -375,4 +433,51 @@ width: 50px;
 .tweet_footer_item span i:hover {
     font-size: 1.5rem;
     transition: all 300ms;
+}
+
+
+
+/* small screen media query*/
+@media only screen and (max-width: 600px) {
+    .custom_navbar{
+        bottom: 0;
+        width: 100vw;
+        height: 5rem;
+    }
+
+    .logo{
+        display: none;
+    }
+
+    .custom_navbar-nav{
+        flex-direction: row;
+    }
+
+    .custom_nav-link{
+        justify-content: center;
+    }
+    .layout_container{
+        margin: 0;
+    }
+    .pagination_nav{
+        margin-bottom: 6rem;
+    }
+}
+
+/* large screen media query*/
+@media only screen and (min-width: 600px) {
+    .custom_navbar{
+        top: 0;
+        width: 5rem;
+        height: 100vh;
+    }
+
+    .custom_navbar:hover {
+        width: 16rem;
+    }
+
+    .custom_navbar:hover .link-text {
+        display: inline;
+        transition:opacity var(--transition-speed);
+    }
 }

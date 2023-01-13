@@ -23,17 +23,19 @@
         <nav class="custom_navbar">
             <ul class="custom_navbar-nav">
                 {% if user.is_authenticated %}
-                <li class="nav-item" >
+                <li class="logo" >
                     <a class="custom_nav-link" href="#">   
-                        <span class="link-text" style="text-align: center;">
-                            <small>                            {{ user.username }}
-                            </small>
+                        <span class="link-text">
+                        {{ user.username }}
                         </span>
+                        <i  class="fa-regular fa-user logo_i"></i>
+
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="custom_nav-link" href="{% url 'index' %}" id="all-posts">
+                        <i class="fa-solid fa-inbox fa-primary fa-secondary"></i>
                         <span class="link-text">
                             All Posts
                         </span>
@@ -46,6 +48,7 @@
 
                 <li class="nav-item">
                     <a href="#" class="custom_nav-link" id="add-post">
+                        <i class="fa-solid fa-pen-to-square fa-primary fa-secondary"></i>
                         <p class="link-text" id="add-post-span">
                             Add Post
                         </p>
@@ -53,18 +56,23 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="custom_nav-link" id="Following">
+                        <i class="fa-regular fa-bookmark fa-primary fa-secondary"></i>
                         <span class="link-text">
                             Following
                         </span>
+                       
                     </a>
 
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'logout' %}" class="custom_nav-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket fa-primary fa-secondary"></i>
+
                         <span class="link-text">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Logout
                         </span>
+
                     </a>
 
                 </li>
@@ -72,14 +80,16 @@
 
                 <li class="nav-item">
                     <a class="custom_nav-link" href="{% url 'index' %}" id="all-posts">
+                        <i class="fa-solid fa-inbox fa-primary fa-secondary"></i>
                         <span class="link-text">
                             All Posts
                         </span>
                     </a>
                 </li>
             
-                <li class="custom_nav-item">
+                <li class="nav-item">
                     <a href="{% url 'login' %}" class="custom_nav-link">
+                        <i class="fa-solid fa-door-open fa-primary fa-secondary"></i>
                         <span class="link-text">
                             Login
                         </span>
@@ -87,13 +97,22 @@
 
                 </li>
 
-                <li class="custom_nav-item">
+                <li class="nav-item">
                     <a href="{% url 'register' %}" class="custom_nav-link">
+                        <i class="fa-regular fa-address-card fa-primary fa-secondary"></i>
                         <span class="link-text">
                             Register
                         </span>
                     </a>
 
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/Overlrd" target="_blank" class="custom_nav-link">
+                        <i class="fa-brands fa-github"></i>
+                        <span class="link-text">
+                            Overlrd
+                        </span>
+                    </a>
                 </li>
                 {% endif %}
             </ul>
